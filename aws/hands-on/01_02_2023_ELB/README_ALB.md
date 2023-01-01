@@ -279,7 +279,7 @@ Successfully created load balancer!
 - Paste is on browser and refresh it
 - Show the changing Public and Private IP addresses and time that the instances was created
 ```
-### Step 2 - Explain the Submenu of Application Load Balancer
+### Step 2 - Explain the Sub-section of Application Load Balancer
 
 - Explain the "Listener" dashboard of ALB.
 
