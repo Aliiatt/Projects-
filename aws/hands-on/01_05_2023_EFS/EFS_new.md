@@ -356,7 +356,9 @@ cat example.txt
 
 # PART 4 - AUTOMOUNT EFS ON REBOOT
 
-- reboot and show that configuration is gone
+- Switch to EC2-1 or EC2-2
+
+- reboot and show that configuration is gone for EC2-1 / EC2-2. Since EC2-3 is configured by AWS fstab is set. 
 ```
 sudo reboot now
 ```
