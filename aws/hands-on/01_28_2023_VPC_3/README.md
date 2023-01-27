@@ -273,11 +273,11 @@ Service Category : AWS services
 Service Name     : com.amazonaws.us-east-1.s3
 Service Type     : gateway
 VPC              : clarus-vpc-a
-Route Table      : choose private one or both 
 ```
 - Create Endpoint
 
 - Go to newly created S3 Endpoint>>> "Route tables" >>> "Manage route tables">>> select "clarus-private-rt"
+- Go to private route table named ‘clarus-private-rt’ and show the endpoint rule that is automatically created by AWS
 
 ### B. Connect to S3 via Endpoint
 
