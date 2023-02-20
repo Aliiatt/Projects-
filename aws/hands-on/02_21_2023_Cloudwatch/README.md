@@ -371,6 +371,7 @@ Click on "Create Rule"
 - Description - optional : cw_event_start
 - Event Bus              : Default(keep it as is)
 - Rule type              : "Schedule"
+- Continue to create rule (Left)>>> Not EventBridge Scheduler!!!!!!!
 ```
 - Click on Next
 
