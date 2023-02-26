@@ -5,15 +5,13 @@ List of hands-on trainings within DevOps as follows;
 # Docker
 
 
+# Ansible
 
 
 # Maven
 
 
-
 # Jenkins
-
-
 
 
 # Kubernetes
@@ -21,5 +19,10 @@ List of hands-on trainings within DevOps as follows;
 
 # Terraform
 
+
+# Prometheus-Grafana
+
+
+# Nexus
 
 
