@@ -1,1 +1,18 @@
-cat event_history.csv | grep serdar | grep -i Terminateinstance | grep -Eo "i-[a-zA-Z0-9]{17}" > /tmp/result.txt
+#!/bin/bash
+
+while true
+do
+  read -p 'Please write your file location: ' FILE 
+  if [[ $FILE == '' ]]
+  then
+    echo "Please give a file"
+  elif [[ ! -f $FILE ]]
+  then
+    echo "Please give an existing file"
+  else
+    break
+  fi
+done
+
+cat $FILE | grep serdar | grep Terminate | grep -Eo "i-[a-zA-Z0-9]{17}" | sort | uniq > /tmp/result.txt 
+echo "Your result is ready under the /tmp/result.txt file"

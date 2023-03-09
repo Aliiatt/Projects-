@@ -51,3 +51,6 @@ echo "${USER_NAME}"
 echo
 echo 'password:'
 echo "${PASSWORD}"
+
+
+# If you get bad interpreter error: "sed -i -e 's/\r$//' <script_name>" command first.
