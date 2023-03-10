@@ -189,13 +189,13 @@ terraform destroy -auto-approve
 
 - First, go to the AWS console and create a security group name `tf-import-sg` and add tcp 22 (ssh) and tcp 80 (http) ports. Write `terraform import security group` to Security Group description. 
 
-- Create two EC2 instances one's ami is `Amazon Linux 2` and the other is `Ubuntu 20.04`. Their tags will be `Name=aws-linux-2`, `Name=ubuntu-20.04` and `Name=tf-import-sg`.  Attach security group to these instances.
+- Create two EC2 instances one's ami is `Amazon Linux 2` and the other is `Ubuntu 22.04`. Their tags will be `Name=aws-linux-2`, `Name=ubuntu-22.04` and `Name=tf-import-sg`.  Attach security group to these instances.
 
 - Create a folder name `learn-terraform-import` and enter the directory.
 
 ```
-mkdir learn-terraform-import
-cd learn-terraform-import
+mkdir terraform-import
+cd terraform-import
 ```
 
 - Create a file name `main.tf`. Add the followings according to the existing resources.
@@ -211,7 +211,7 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "4.23.0"
+      version = "4.58.0"
     }
   }
 }
@@ -222,19 +222,19 @@ provider "aws" {
 
 variable "tf-ami" {
   type = list(string)
-  default = ["ami-0cff7528ff583bf9a", "ami-08d4ac5b634553e16", "ami-06640050dc3f556bb"]
+  default = ["ami-005f9685cb30f234b", "ami-0557a15b87f6559cf", "ami-0c9978668f8d55984"]
 }
 
 variable "tf-tags" {
   type = list(string)
-  default = ["aws-linux-2", "ubuntu-20.04", "red-hat-linux-8"]
+  default = ["aws-linux-2", "ubuntu-22.04", "red-hat-linux-8"]
 }
 
 resource "aws_instance" "tf-instances" {
   ami = element(var.tf-ami, count.index )
   instance_type = "t2.micro"
   count = 3
-  key_name = "clarusway"
+  key_name = "clarusway"            // change here
   security_groups = ["tf-import-sg"]
   tags = {
     Name = element(var.tf-tags, count.index )
@@ -292,7 +292,7 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 ```
 
-- Check the terraform.tfstate and import the second instance. (Take the ubuntu 20.04 instance-id from the console)
+- Check the terraform.tfstate and import the second instance. (Take the ubuntu 22.04 instance-id from the console)
 
 ```bash
 $ terraform import "aws_instance.tf-instances[1]" i-092fe70d1cef163c1
@@ -349,5 +349,3 @@ $ terraform apply
 ```bash
 $ terraform destroy
 ```
-
-- Visit the AWS console to see the terminated resources.
