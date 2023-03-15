@@ -20,20 +20,12 @@ locals {
   user = "clarusway"
 }
 
-variable "secgr-dynamic-ports" {
-  default = [22,80,443]
-}
-
-variable "instance-type" {
-  default = "t2.micro"
-}
-
 resource "aws_security_group" "allow_ssh" {
   name        = "${local.user}-docker-instance-sg"
   description = "Allow SSH inbound traffic"
 
   dynamic "ingress" {
-    for_each = var.secgr-dynamic-ports
+    for_each = local.secgr-dynamic-ports
     content {
       from_port = ingress.value
       to_port = ingress.value
