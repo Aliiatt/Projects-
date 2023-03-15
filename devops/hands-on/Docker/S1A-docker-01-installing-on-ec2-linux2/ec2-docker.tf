@@ -87,5 +87,5 @@ output "myec2-public-ip" {
 }
 
 output "ssh-connection-command" {
-  value = "ssh -i ${local.key-name} ec2-user@${aws_instance.tf-ec2.public_ip}"
+  value = "ssh -i ${local.key-name}.pem ec2-user@${aws_instance.tf-ec2.public_ip}"
 }
