@@ -87,7 +87,7 @@ docker ps -a
 - Start the alpine container and connect to it.
 
 ```bash
-docker start 737 && docker attach 737
+docker start 737 && docker exec -it 737 ash
 ```
 
 - Show that the file `short-life.txt` is still there, and explain why it is there. (Container holds it data until removed).
@@ -105,7 +105,7 @@ exit
 - Remove the alpine container.
 
 ```bash
-docker rm 737
+docker rm -f 737
 ```
 
 - Show the list of all containers, and the alpine container is gone with its data.
@@ -523,5 +523,3 @@ docker rm -f nginx-default nginx-new
 ```bash
  docker volume prune -f
 ```
-
- 
