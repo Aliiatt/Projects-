@@ -72,7 +72,7 @@ resource "aws_instance" "tf-ec2" {
               #!/bin/bash
               hostnamectl set-hostname docker_instance
               yum update -y
-              amazon-linux-extras install docker -y
+              yum install docker -y
               systemctl start docker
               systemctl enable docker
               usermod -a -G docker ec2-user
