@@ -70,7 +70,7 @@ systemctl status docker
 docker image ls
 ```
 
-- Download Docker image `ubuntu` and explain image tags (defaults to `latest`) on Docker Hub. Show `ubuntu` repo on Docker Hub and which version the `latest` tag corresponds to (`20.04`).
+- Download Docker image `ubuntu` and explain image tags (defaults to `latest`) on Docker Hub. Show `ubuntu` repo on Docker Hub and which version the `latest` tag corresponds to (`22.04`).
 
 ```bash
 # Defaults to ubuntu:latest
@@ -84,7 +84,7 @@ docker image ls
 docker run -it ubuntu
 ```
 
-- Display the `ubuntu` os info on the container (`VERSION="20.04 LTS (Focal Fossa)"`) and note that the `latest` tag is showing release `20.04` as in the Docker Hub. Then exit the container.
+- Display the `ubuntu` os info on the container (`VERSION="22.04.2 LTS (Jammy Jellyfish)"`) and note that the `latest` tag is showing release `22.04` as in the Docker Hub. Then exit the container.
 
 ```bash
 cat /etc/os-release
@@ -197,7 +197,7 @@ docker build -t "clarusway/flask-app:2.0" -f ./Dockerfile-alpine .
 docker image ls
 ```
 
-- Note that while the size of `clarusway/flask-app:1.0` is approximately 400MB, the size of `clarusway/flask-app:2.0` is 56MB.
+- Note that while the size of `clarusway/flask-app:1.0` is approximately 473MB, the size of `clarusway/flask-app:2.0` is 67MB.
 
 - Run the newly built image as container in detached mode, connect host `port 80` to container `port 80`, and name container as `welcome`. Then list running containers and connect to EC2 instance from the browser to show the Flask app is running.
 
