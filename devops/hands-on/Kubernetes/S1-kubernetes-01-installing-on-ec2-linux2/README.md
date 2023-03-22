@@ -1,12 +1,12 @@
-# Hands-on Kubernetes-01a : Installing Kubernetes on Ubuntu 20.04 running on AWS EC2 Instances
+# Hands-on Kubernetes-01 : Installing Kubernetes on Ubuntu running on AWS EC2 Instances
 
-Purpose of the this hands-on training is to give students the knowledge of how to install and configure Kubernetes on Ubuntu 20.04 EC2 Instances.
+Purpose of the this hands-on training is to give students the knowledge of how to install and configure Kubernetes on Ubuntu EC2 Instances.
 
 ## Learning Outcomes
 
 At the end of the this hands-on training, students will be able to;
 
-- install Kubernetes on Ubuntu 20.04.
+- install Kubernetes on Ubuntu.
 
 - explain steps of the Kubernetes installation.
 
@@ -29,7 +29,7 @@ At the end of the this hands-on training, students will be able to;
 
 ## Part 1 - Setting Up Kubernetes Environment on All Nodes
 
-- In this hands-on, we will prepare two nodes for Kubernetes on `Ubuntu 20.04`. One of the node will be configured as the Master node, the other will be the worker node. Following steps should be executed on all nodes. *Note: It is recommended to install Kubernetes on machines with `2 CPU Core` and `2GB RAM` at minimum to get it working efficiently. For this reason, we will select `t2.medium` as EC2 instance type, which has `2 CPU Core` and `4 GB RAM`.*
+- In this hands-on, we will prepare two nodes for Kubernetes on `Ubuntu 22.04`. One of the node will be configured as the Master node, the other will be the worker node. Following steps should be executed on all nodes. *Note: It is recommended to install Kubernetes on machines with `2 CPU Core` and `2GB RAM` at minimum to get it working efficiently. For this reason, we will select `t2.medium` as EC2 instance type, which has `2 CPU Core` and `4 GB RAM`.*
 
 - Explain briefly [required ports](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)  for Kubernetes. 
 
@@ -89,9 +89,11 @@ bash
 ```bash
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 - Update app repository and install Kubernetes packages and Docker.
@@ -119,10 +121,13 @@ newgrp docker
 - As a requirement, update the `iptables` of Linux Nodes to enable them to see bridged traffic correctly. Thus, you should ensure `net.bridge.bridge-nf-call-iptables` is set to `1` in your `sysctl` config and activate `iptables` immediately.
 
 ```bash
-cat << EOF | sudo tee /etc/sysctl.d/k8s.conf
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward                 = 1
 EOF
+
+# Apply sysctl params without reboot
 sudo sysctl --system
 ```
 
@@ -159,11 +164,11 @@ sudo kubeadm init --apiserver-advertise-address=<ec2-private-ip> --pod-network-c
 
 > **Note**: There are a bunch of pod network providers and some of them use pre-defined `--pod-network-cidr` block. Check the documentation at the References part. We will use Flannel for pod network and Flannel uses 10.244.0.0/16 CIDR block. 
 
-- In case of problems, use following command to reset the initialization and restart from Part 2 (Setting Up Master Node for Kubernetes).
+>- In case of problems, use following command to reset the initialization and restart from Part 2 (Setting Up Master Node for Kubernetes).
 
-```bash
-sudo kubeadm reset
-```
+>```bash
+>sudo kubeadm reset
+>```
 
 - After successful initialization, you should see something similar to the following output (shortened version).
 
@@ -227,12 +232,6 @@ kubectl get pods -n kube-system -o wide
 kubectl get services
 ```
 
-- Show the list of the Docker images running on the Master node to enable Kubernetes service.
-
-```bash
-docker container ls
-```
-
 ## Part 3 - Adding the Slave/Worker Nodes to the Cluster
 
 - Show the list of nodes. Since we haven't added worker nodes to the cluster, we should see only master node itself on the list.
@@ -240,8 +239,6 @@ docker container ls
 ```bash
 kubectl get nodes
 ```
-
-- Run `docker container ls` on the worker nodes command to list the Docker images running on the worker nodes. We should see an empty list.
 
 - By default, the Kubernetes cgroup driver is set to system, but docker is set to systemd. We need to change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` and adding the following line then restart deamon, docker and kubelet:
 
