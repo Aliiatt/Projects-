@@ -39,14 +39,13 @@ ssh -i .ssh/call-training.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazon
 - Download the current stable release of `Docker Compose` executable.
 
 ```bash
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" \
--o /usr/local/bin/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
 ```
 
-- Apply executable permissions to the binary:
+- You can also create a symbolic link to /usr/bin or any other directory in your path.:
 
 ```bash
-sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
 - Check if the `Docker Compose`is working. Should see something like `docker-compose version 1.26.2, build 1110ad01`
