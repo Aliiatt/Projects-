@@ -141,8 +141,8 @@ sudo sysctl --system
 - Configure containerd so that it starts using systemd as cgroup.
 
 ```bash
-mkdir /etc/containerd
-containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
+sudo mkdir /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 ```
 
@@ -161,15 +161,6 @@ sudo systemctl enable containerd
 
 ```bash
 sudo kubeadm config images pull
-```
-
-- By default, the Kubernetes cgroup driver is set to system, but docker is set to systemd. We need to change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` and adding the following line then restart deamon, docker and kubelet:
-
-```bash
-echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-sudo systemctl restart kubelet
 ```
 
 - Let `kubeadm` prepare the environment for you. Note: Do not forget to change `<ec2-private-ip>` with your master node private IP.
@@ -204,17 +195,21 @@ To start using your cluster, you need to run the following as a regular user:
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-  kubeadm join 172.31.3.109:6443 --token 1aiej0.kf0t4on7c7bm2hpa \
-      --discovery-token-ca-cert-hash sha256:0e2abfb56733665c0e6204217fef34be2a4f3c4b8d1ea44dff85666ddf722c02
+kubeadm join 172.31.19.226:6443 --token 9tx5zh.p6s4njz4f2lvzz1v \
+        --discovery-token-ca-cert-hash sha256:252671bcdd346adc2ecf7bf78defa1f27505b12947215930c5e1e57ccddcf037
 ```
 
-> Note to the Instructor: Note down the `kubeadm join ...` part in order to connect your worker nodes to the master node. Remember to run this command with `sudo`.
+> Note down the `kubeadm join ...` part in order to connect your worker nodes to the master node. Remember to run this command with `sudo`.
 
 - Run following commands to set up local `kubeconfig` on master node.
 
@@ -254,7 +249,7 @@ kubectl get pods -n kube-system -o wide
 kubectl get services
 ```
 
-## Part 3 - Adding the Slave/Worker Nodes to the Cluster
+## Part 3 - Adding the Worker Nodes to the Cluster
 
 - Show the list of nodes. Since we haven't added worker nodes to the cluster, we should see only master node itself on the list.
 
