@@ -138,6 +138,21 @@ EOF
 sudo sysctl --system
 ```
 
+- Configure containerd so that it starts using systemd as cgroup.
+
+```bash
+mkdir /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
+sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+```
+
+Restart and enable containerd service
+
+```bash
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+```
+
 ## Part 2 - Setting Up Master Node for Kubernetes
 
 - Following commands should be executed on Master Node only.
