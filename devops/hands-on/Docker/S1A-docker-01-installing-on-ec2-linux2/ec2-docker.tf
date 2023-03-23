@@ -78,7 +78,7 @@ resource "aws_instance" "tf-ec2" {
               usermod -a -G docker ec2-user
               # install docker-compose
               curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-              ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+              chmod +x /usr/local/bin/docker-compose
 	          EOF
 }  
 output "myec2-public-ip" {
