@@ -203,7 +203,7 @@ kubectl delete replicaset <replicaset-name>
 
 The .spec.selector field is a label selector. 
 
-The .spec.selector field and .spec.template.metadata field must be same. There are additional issues related this subject like louse coupling, but we discuss this on service object.  
+The .spec.selector field and .spec.template.metadata field must be same. There are additional issues related this subject like louse coupling, but we discuss this on the service object.  
 
 ### Deployments
 
