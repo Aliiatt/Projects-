@@ -248,22 +248,12 @@ kubectl get pods -n kube-system -o wide
 ```bash
 kubectl get services
 ```
-
 ## Part 3 - Adding the Worker Nodes to the Cluster
 
 - Show the list of nodes. Since we haven't added worker nodes to the cluster, we should see only master node itself on the list.
 
 ```bash
 kubectl get nodes
-```
-
-- By default, the Kubernetes cgroup driver is set to system, but docker is set to systemd. We need to change the Docker cgroup driver by creating a configuration file `/etc/docker/daemon.json` and adding the following line then restart deamon, docker and kubelet:
-
-```bash
-echo '{"exec-opts": ["native.cgroupdriver=systemd"]}' | sudo tee /etc/docker/daemon.json
-sudo systemctl daemon-reload
-sudo systemctl restart docker
-sudo systemctl restart kubelet
 ```
 
 - Run `sudo kubeadm join...` command to have them join the cluster.
