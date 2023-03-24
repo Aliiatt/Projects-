@@ -22,23 +22,8 @@ locals {
   instancetype = "t3a.medium"
 }
 
-data "aws_ami" "ubuntu" {
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
 resource "aws_instance" "master" {
-  ami                  = data.aws_ami.ubuntu.id
+  ami                  = "ami-0557a15b87f6559cf"
   instance_type        = local.instancetype
   key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
@@ -53,7 +38,7 @@ resource "aws_instance" "master" {
 }
 
 resource "aws_instance" "worker" {
-  ami                  = data.aws_ami.ubuntu.id
+  ami                  = "ami-0557a15b87f6559cf"
   instance_type        = local.instancetype
   key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
