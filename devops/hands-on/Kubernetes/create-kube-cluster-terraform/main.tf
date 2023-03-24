@@ -15,30 +15,47 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
-variable "key-name" {
-  default = "oliver"   # change here
+locals {
+  # change here, optional
+  name = "clarusway"
+  keyname = "clarusway"
+  instancetype = "t3a.medium"
 }
 
-locals {
-  name = "oliver"   # change here, optional
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 resource "aws_instance" "master" {
-  ami                  = "ami-04505e74c0741db8d"
-  instance_type        = "t3a.medium"
-  key_name             = var.key-name
+  ami                  = data.aws_ami.ubuntu.id
+  instance_type        = local.instancetype
+  key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
   security_groups      = ["${local.name}-k8s-master-sec-gr"]
   user_data            = data.template_file.master.rendered
+  root_block_device {
+    volume_size = 20
+  }
   tags = {
     Name = "${local.name}-kube-master"
   }
 }
 
 resource "aws_instance" "worker" {
-  ami                  = "ami-04505e74c0741db8d"
-  instance_type        = "t3a.medium"
-  key_name             = var.key-name
+  ami                  = data.aws_ami.ubuntu.id
+  instance_type        = local.instancetype
+  key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
   security_groups      = ["${local.name}-k8s-master-sec-gr"]
   user_data            = data.template_file.worker.rendered
@@ -49,12 +66,12 @@ resource "aws_instance" "worker" {
 }
 
 resource "aws_iam_instance_profile" "ec2connectprofile" {
-  name = "ec2connectprofile"
+  name = "ec2connectprofile-${local.name}"
   role = aws_iam_role.ec2connectcli.name
 }
 
 resource "aws_iam_role" "ec2connectcli" {
-  name = "ec2connectcli"
+  name = "ec2connectcli-${local.name}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -102,7 +119,6 @@ data "template_file" "worker" {
     master-id = aws_instance.master.id
     master-private = aws_instance.master.private_ip
   }
-
 }
 
 data "template_file" "master" {
@@ -132,6 +148,13 @@ resource "aws_security_group" "tf-k8s-master-sec-gr" {
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
