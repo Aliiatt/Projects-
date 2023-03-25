@@ -29,9 +29,6 @@ resource "aws_instance" "master" {
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
   security_groups      = ["${local.name}-k8s-master-sec-gr"]
   user_data            = data.template_file.master.rendered
-  root_block_device {
-    volume_size = 20
-  }
   tags = {
     Name = "${local.name}-kube-master"
   }
