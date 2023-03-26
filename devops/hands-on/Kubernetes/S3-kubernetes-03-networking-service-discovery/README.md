@@ -170,7 +170,7 @@ spec:
 kubectl get pods
 kubectl apply -f forcurl.yaml
 kubectl exec -it forcurl -- sh
-/ # ping 172.16.166.180
+/ # ping 10.244.1.22
 ```
 
 - Show the Pods detailed information and learn their IP addresses again.
