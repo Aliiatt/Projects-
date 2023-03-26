@@ -23,7 +23,7 @@ At the end of this hands-on training, students will be able to;
 - Launch a Kubernetes Cluster of Ubuntu 20.04 with two nodes (one master, one worker).
 
 >*Note: If you have a problem with the Kubernetes cluster, you can use this link for the lesson.*
->https://www.katacoda.com/courses/kubernetes/playground
+>https://killercoda.com/playgrounds
 
 - Check if Kubernetes is running and nodes are ready.
 
