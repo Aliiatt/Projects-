@@ -335,7 +335,7 @@ spec:
     port: 3000        
     targetPort: 5000
   selector:
-    env: front-end
+    app: web-flask
 ```
 
 - Configure the web-flask-svc service  again via apply command.
