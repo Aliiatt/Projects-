@@ -543,10 +543,10 @@ Conditions:
 $ kubectl delete -n kube-system deployments.apps metrics-server
 ```
 
-- Get the Metric Server form [GitHub](https://github.com/kubernetes-sigs/metrics-server/releases/tag/v0.5.0).
+- Get the Metric Server form [GitHub](https://github.com/kubernetes-sigs/metrics-server/releases/tag/v0.6.3).
 
 ```bash
-$ wget https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.5.0/components.yaml
+$ wget https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.3/components.yaml
 ```
 
 - Edit the file `components.yaml`. You will select the `Deployment` part in the file. Add the below line to `containers.args field under the deployment object`.
