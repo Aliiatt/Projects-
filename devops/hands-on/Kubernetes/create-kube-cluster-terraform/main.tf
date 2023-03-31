@@ -24,7 +24,7 @@ locals {
 }
 
 resource "aws_instance" "master" {
-  ami                  = "ami-04505e74c0741db8d"
+  ami                  = "ami-0557a15b87f6559cf"
   instance_type        = "t3a.medium"
   key_name             = var.key-name
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
@@ -36,7 +36,7 @@ resource "aws_instance" "master" {
 }
 
 resource "aws_instance" "worker" {
-  ami                  = "ami-04505e74c0741db8d"
+  ami                  = "ami-0557a15b87f6559cf"
   instance_type        = "t3a.medium"
   key_name             = var.key-name
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
