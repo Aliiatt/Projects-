@@ -431,7 +431,7 @@ $ pwd
 $ mkdir auto-scaling && cd auto-scaling
 $ cat << EOF > hpa-php-apache.yaml
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: php-apache
@@ -442,7 +442,13 @@ spec:
     name: php-apache
   minReplicas: 2
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 50
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
 
 EOF
 ```
@@ -450,7 +456,7 @@ EOF
 ```bash
 $ cat << EOF > hpa-web.yaml
 
-apiVersion: autoscaling/v1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: web-deployment
@@ -461,7 +467,13 @@ spec:
     name: web-deployment
   minReplicas: 3
   maxReplicas: 5
-  targetCPUUtilizationPercentage: 50 
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
 
 EOF
 ```
