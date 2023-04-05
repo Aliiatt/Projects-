@@ -109,6 +109,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db-deployment
+  labels:
+    app: todoapp
 spec:
   replicas: 1
   selector:
@@ -168,6 +170,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-deployment
+  labels:
+    app: todoapp
 spec:
   replicas: 1
   selector:
