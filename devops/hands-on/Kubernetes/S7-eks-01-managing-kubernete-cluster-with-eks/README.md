@@ -36,7 +36,7 @@ sudo yum update -y
 - Download the Amazon EKS vended kubectl binary that is compatible with kubernetes cluster version.
 
 ```bash
-curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.13/2022-10-31/bin/linux/amd64/kubectl
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.7/2023-03-17/bin/linux/amd64/kubectl
 ```
 
 - Apply execute permissions to the binary.
@@ -100,7 +100,7 @@ aws eks list-clusters
 
     - Give general descriptions about the page and the steps of creating the cluster.
 
-    - Fill the ```Name``` and ```Kubernetes version``` fields. (Ex: MyCluster, 1.23)
+    - Fill the ```Name``` and ```Kubernetes version``` fields. (Ex: MyCluster, 1.25)
 
         <i>Mention the durations for minor version support and the approximate release frequency.</i>
 
@@ -301,7 +301,7 @@ kubectl -n kube-system edit deployment.apps/cluster-autoscaler
 
 This command will open the yaml file for your editting. Replace <CLUSTER NAME> value with your own cluster name, and add the following command option ```--skip-nodes-with-system-pods=false``` to the command section under ```containers``` under ```spec```. Save and exit the file by pressing ```:wq```. The changes will be applied.
 
-7. Find an appropriate version of your cluster autoscaler in the [link](https://github.com/kubernetes/autoscaler/releases). The version number should start with version number of the cluster Kubernetes version. For example, if you have selected the Kubernetes version 1.23, you should find something like ```1.23.0```.
+7. Find an appropriate version of your cluster autoscaler in the [link](https://github.com/kubernetes/autoscaler/releases). The version number should start with version number of the cluster Kubernetes version. For example, if you have selected the Kubernetes version 1.25, you should find something like ```1.25.0```.
 
 8. Then, in the following command, set the Cluster Autoscaler image tag as that version you have found in the previous step.
 
@@ -312,7 +312,7 @@ kubectl -n kube-system set image deployment.apps/cluster-autoscaler cluster-auto
 For example:
 
 ```bash
-kubectl -n kube-system set image deployment.apps/cluster-autoscaler cluster-autoscaler=k8s.gcr.io/autoscaling/cluster-autoscaler:v1.23.0
+kubectl -n kube-system set image deployment.apps/cluster-autoscaler cluster-autoscaler=k8s.gcr.io/autoscaling/cluster-autoscaler:v1.25.1
 ```
 
 ## Part 5 - Deploying a Sample Application
