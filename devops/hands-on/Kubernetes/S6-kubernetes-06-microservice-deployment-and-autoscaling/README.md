@@ -579,7 +579,7 @@ kind: Deployment
       containers:
       - args:
         - --cert-dir=/tmp
-        - --secure-port=443
+        - --secure-port=4443
         - --kubelet-insecure-tls
         - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
         - --kubelet-use-node-status-port
