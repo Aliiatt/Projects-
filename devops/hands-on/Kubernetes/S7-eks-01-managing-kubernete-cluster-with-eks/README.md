@@ -371,7 +371,7 @@ spec:
 2. Deploy the application with following command.
 
 ```bash
-kubectl apply -f myapp.yaml
+kubectl apply -f myapp.yml
 ```
 
 3. Run the command below.
