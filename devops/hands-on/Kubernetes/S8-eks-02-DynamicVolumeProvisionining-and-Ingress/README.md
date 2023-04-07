@@ -51,7 +51,7 @@ sudo yum update -y
 - Download the Amazon EKS vended kubectl binary.
 
 ```bash
-curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.23.7/2022-06-29/bin/linux/amd64/kubectl
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.25.7/2023-03-17/bin/linux/amd64/kubectl
 ```
 
 - Apply execute permissions to the binary.
@@ -83,7 +83,7 @@ kubectl version --short --client
 - Download and extract the latest release of eksctl with the following command.
 
 ```bash
-curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.111.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 ```
 
 - Move the extracted binary to /usr/local/bin.
@@ -140,6 +140,68 @@ eksctl create cluster --help
 - Show the aws `eks service` on aws management console and explain `eksctl-my-cluster-cluster` stack on `cloudformation service`.
 
 ## Part 3 - Dynamic Volume Provisionining
+
+### The Amazon Elastic Block Store (Amazon EBS) Container Storage Interface (CSI) driver
+
+- The Amazon Elastic Block Store (Amazon EBS) Container Storage Interface (CSI) driver allows Amazon Elastic Kubernetes Service (Amazon EKS) clusters to manage the lifecycle of Amazon EBS volumes for persistent volumes.
+
+- The Amazon EBS CSI driver isn't installed when you first create a cluster. To use the driver, you must add it as an Amazon EKS add-on or as a self-managed add-on. 
+
+- Install the Amazon EBS CSI driver. For instructions on how to add it as an Amazon EKS add-on, see Managing the [Amazon EBS CSI driver as an Amazon EKS add-on](https://docs.aws.amazon.com/eks/latest/userguide/managing-ebs-csi.html).
+
+### Creating an IAM OIDC provider for your cluster
+
+- To use AWS EBS CSI, it is required to have an AWS Identity and Access Management (IAM) OpenID Connect (OIDC) provider for your cluster. 
+
+- Determine whether you have an existing IAM OIDC provider for your cluster. Retrieve your cluster's OIDC provider ID and store it in a variable.
+
+```bash
+oidc_id=$(aws eks describe-cluster --name cw-cluster --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)
+```
+
+- Determine whether an IAM OIDC provider with your cluster's ID is already in your account.
+
+```bash
+aws iam list-open-id-connect-providers | grep $oidc_id
+```
+If output is returned from the previous command, then you already have a provider for your cluster and you can skip the next step. If no output is returned, then you must create an IAM OIDC provider for your cluster.
+
+- Create an IAM OIDC identity provider for your cluster with the following command. Replace my-cluster with your own value.
+
+```bash
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=cw-cluster --approve
+```
+
+### Creating the Amazon EBS CSI driver IAM role for service accounts
+
+- The Amazon EBS CSI plugin requires IAM permissions to make calls to AWS APIs on your behalf. 
+
+- When the plugin is deployed, it creates and is configured to use a service account that's named ebs-csi-controller-sa. The service account is bound to a Kubernetes clusterrole that's assigned the required Kubernetes permissions.
+
+#### To create your Amazon EBS CSI plugin IAM role with eksctl
+
+- Create an IAM role and attach the required AWS managed policy with the following command. Replace cw-cluster with the name of your cluster. The command deploys an AWS CloudFormation stack that creates an IAM role, attaches the IAM policy to it, and annotates the existing ebs-csi-controller-sa service account with the Amazon Resource Name (ARN) of the IAM role.
+
+```bash
+eksctl create iamserviceaccount \
+  --name ebs-csi-controller-sa \
+  --namespace kube-system \
+  --cluster cw-cluster \
+  --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
+  --approve \
+  --role-only \
+  --role-name AmazonEKS_EBS_CSI_DriverRole
+```
+
+### Adding the Amazon EBS CSI add-on
+
+#### To add the Amazon EBS CSI add-on using eksctl
+
+- Run the following command. Replace cw-cluster with the name of your cluster, 111122223333 with your account ID, and AmazonEKS_EBS_CSI_DriverRole with the name of the IAM role created earlier.
+
+```bash
+eksctl create addon --name aws-ebs-csi-driver --cluster cw-cluster --service-account-role-arn arn:aws:iam::111122223333:role/AmazonEKS_EBS_CSI_DriverRole --force
+```
 
 - Firstly, check the StorageClass object in the cluster. 
 
@@ -301,6 +363,7 @@ gp2 (default)            kubernetes.io/aws-ebs   Delete          WaitForFirstCon
 
 ```bash
 kubectl delete -f pod-with-dynamic-storage.yaml
+kubectl delete -f clarus-pv-claim.yaml
 ```
 
 ## Part 4 - Ingress
@@ -599,7 +662,7 @@ Briefly explain ingress and ingress controller. For additional information a few
 - Open the offical [ingress-nginx]( https://kubernetes.github.io/ingress-nginx/deploy/ ) explain the `ingress-controller` installation steps for different architecture.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
 - Now, check the contents of the `ingress-service`.
