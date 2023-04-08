@@ -88,7 +88,7 @@ spec:
 kubectl apply -f clarus-deploy.yaml
 ```
 
-- List the pods and notice that all pods are assigned to the master node.
+- List the pods and notice that all pods are assigned to the worker node.
 
 ```bash
 kubectl get po -o wide
@@ -103,7 +103,6 @@ kubectl delete -f clarus-deploy.yaml
 - For this lesson, we need two worker nodes. Instead of creating an addition node, we will use the controlplane node as both the controlplane and worker node. So, we will arrange a controlplane with the following command.
 
 ```bash
-kubectl taint nodes kube-master node-role.kubernetes.io/master:NoSchedule-
 kubectl taint nodes kube-master node-role.kubernetes.io/control-plane:NoSchedule-
 ```
 
@@ -172,7 +171,7 @@ spec:
 kubectl apply -f clarus-deploy.yaml
 ```
 
-- List the pods and notice that the pods are assigned to the only worker node.
+- List the pods and notice that the pods are assigned to the only master node.
 
 ```bash
 kubectl get po -o wide
@@ -264,7 +263,6 @@ kubectl delete -f clarus-deploy.yaml
 
   - requiredDuringSchedulingIgnoredDuringExecution
   - preferredDuringSchedulingIgnoredDuringExecution
-  - requiredDuringSchedulingRequiredDuringExecution
 
 - Let's analyze this long sentence.
 
@@ -272,7 +270,6 @@ kubectl delete -f clarus-deploy.yaml
 | ------------------------------------------------| ---------------- | --------------- |
 | requiredDuringSchedulingIgnoredDuringExecution  | required         | Ignored         |
 | preferredDuringSchedulingIgnoredDuringExecution | preferred        | Ignored         |
-| requiredDuringSchedulingRequiredDuringExecution | required         | required        |
 
 
 - The first one (requiredDuringSchedulingIgnoredDuringExecution) specifies rules that must be met for a pod to be scheduled onto a node (similar to nodeSelector but using a more expressive syntax), while the second one (preferredDuringSchedulingIgnoredDuringExecution) specifies preferences that the scheduler will try to enforce but will not guarantee. For example, we specify labels for nodes and nodeSelectors for pods.
@@ -391,7 +388,7 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:   # This field is changed.
-          - weight: 1                                        # This field is changed.         
+          - weight: 10                                        # This field is changed.         
             preference:                                      # This field is changed.   
               matchExpressions:
               - key: size
@@ -400,6 +397,13 @@ spec:
                 - large
                 - medium
 ```
+
+> ### Node affinity weight
+
+> You can specify a weight between 1 and 100 for each instance of the preferredDuringSchedulingIgnoredDuringExecution affinity type. When the scheduler finds nodes that meet all the other scheduling requirements of the Pod, the scheduler iterates through every preferred rule that the node satisfies and adds the value of the weight for that expression to a sum.
+
+> The final sum is added to the score of other priority functions for the node. Nodes with the highest total score are prioritized when the scheduler makes a scheduling decision for the Pod.
+
 
 - Create the clarus-deploy again.
 
@@ -419,7 +423,7 @@ kubectl get po -o wide
 kubectl delete -f clarus-deploy.yaml 
 ```
 
-- The `IgnoredDuringExecution` part of the names means that similar to how nodeSelector works, if labels on a node change at runtime such that the affinity rules on a pod are no longer met, the pod continues to run on the node. In the future, the Kubernetes community plans to offer `requiredDuringSchedulingRequiredDuringExecution` which will be identical to `requiredDuringSchedulingIgnoredDuringExecution` except that it will evict pods from nodes that cease to satisfy the pods' node affinity requirements.
+- The `IgnoredDuringExecution` part of the names means that similar to how nodeSelector works, if labels on a node change at runtime such that the affinity rules on a pod are no longer met, the pod continues to run on the node.
 
 ## Part 6 - Pod Affinity
 
@@ -524,7 +528,7 @@ kubectl delete -f clarus-db.yaml
 ```bash
 kubectl get no
 kubectl describe node kube-master | grep -i taint
-kubectl describe node kube-worker-1 | grep -i taint
+kubectl describe node kube-worker | grep -i taint
 ```
 
 - As we see, there is no taint for our nodes.
@@ -535,18 +539,18 @@ kubectl describe node kube-worker-1 | grep -i taint
 kubectl taint nodes node-name key=value:taint-effect
 ```
 
-- Let's add a taint to the kube-worker-1 using `kubectl taint` command.
+- Let's add a taint to the kube-worker using `kubectl taint` command.
 
 ```bash
-kubectl taint nodes kube-worker-1 clarus=way:NoSchedule
+kubectl taint nodes kube-worker clarus=way:NoSchedule
 ```
 
-- This command places a taint on node kube-worker-1. The taint has key clarus, value way, and taint effect NoSchedule. This means that no pod will be able to schedule onto kube-worker-1 unless it has matching toleration.
+- This command places a taint on node kube-worker. The taint has key clarus, value way, and taint effect NoSchedule. This means that no pod will be able to schedule onto kube-worker unless it has matching toleration.
 
-- Check that there is a taint for kube-worker-1.
+- Check that there is a taint for kube-worker.
 
 ```bash
-kubectl describe node kube-worker-1 | grep -i taint
+kubectl describe node kube-worker | grep -i taint
 ```
 
 - Update the clarus-deploy.yaml as below. 
@@ -587,7 +591,7 @@ kubectl apply -f clarus-deploy.yaml
 kubectl get po -o wide
 ```
 
-- We specify toleration for a pod in the PodSpec. Both of the following tolerations "match" the taint created by the kubectl taint line above, and thus a pod with either toleration would be able to schedule onto kube-worker-1:
+- We specify toleration for a pod in the PodSpec. Both of the following tolerations "match" the taint created by the kubectl taint line above, and thus a pod with either toleration would be able to schedule onto kube-worker:
 
 ```yaml
 tolerations:
@@ -663,8 +667,8 @@ kubectl delete -f clarus-deploy.yaml
 > Taints and tolerations are not used to assign a pod to a node, they only restrict nodes from accepting certain tolerations.
 > If we want to assign a pod to a specific node, we will use the other concept, Node Affinity.
 
-- Remove taint from the kube-worker-1 node.
+- Remove taint from the kube-worker node.
 
 ```bash
-kubectl taint nodes kube-worker-1 clarus=way:NoSchedule-
+kubectl taint nodes kube-worker clarus=way:NoSchedule-
 ```
