@@ -112,6 +112,13 @@ helm show chart bitnami/mysql
 helm show all bitnami/mysql
 ```
 
+- Installing the way we have here will only use the default configuration options for this chart. Many times, you will want to customize the chart to use your preferred configuration. To see what options are configurable on a chart, use helm show values.
+
+
+```bash
+helm show values bitnami/mysql
+```
+
 - Whenever we install a chart, a new release is created. So one chart can be installed multiple times into the same cluster. And each can be independently managed and upgraded.
 
 - Install a new release with bitnami/wordpress chart.
