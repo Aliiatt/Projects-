@@ -26,8 +26,10 @@ At the end of the this hands-on training, students will be able to;
 - Connect to the control node with SSH and run the following commands.
 
 ```bash
-sudo yum update -y
-sudo amazon-linux-extras install ansible2
+sudo dnf update -y
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+pip3 install --user ansible
 ```
 ### Confirm Installation
 
@@ -87,7 +89,7 @@ $ scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/h
   hosts: all
   tasks:
    - name: Ping test
-     ping:
+     ansible.builtin.ping:
 ```
 
 - Run the yaml file.
@@ -104,7 +106,7 @@ ansible-playbook playbook1.yml
   hosts: webservers
   tasks:
    - name: Copy your file to the webservers
-     copy:
+     ansible.builtin.copy:
        src: /home/ec2-user/testfile1
        dest: /home/ec2-user/testfile1
 
@@ -112,7 +114,7 @@ ansible-playbook playbook1.yml
   hosts: ubuntuservers
   tasks:
    - name: Copy your file to the ubuntuservers
-     copy:
+     ansible.builtin.copy:
        src: /home/ec2-user/testfile1
        dest: /home/ubuntu/testfile1
 
@@ -136,7 +138,7 @@ $ vim playbook3.yml
   hosts: webservers
   tasks:
    - name: Copy your file to the webservers
-     copy:
+     ansible.builtin.copy:
        src: /home/ec2-user/testfile1
        dest: /home/ec2-user/testfile1
        mode: u+rw,g-wx,o-rwx
@@ -145,7 +147,7 @@ $ vim playbook3.yml
   hosts: ubuntuservers
   tasks:
    - name: Copy your file to the ubuntuservers
-     copy:
+     ansible.builtin.copy:
        src: /home/ec2-user/testfile1
        dest: /home/ubuntu/testfile1
        mode: u+rw,g-wx,o-rwx
@@ -154,12 +156,12 @@ $ vim playbook3.yml
   hosts: node1
   tasks:
    - name: Copy using inline content
-     copy:
+     ansible.builtin.copy:
        content: '# This file was moved to /etc/ansible/testfile2'
        dest: /home/ec2-user/testfile2
 
    - name: Create a new text file
-     shell: "echo Hello World > /home/ec2-user/testfile3"
+     ansible.builtin.shell: "echo Hello World > /home/ec2-user/testfile3"
 ```
 
 - Run the yaml file.
@@ -183,21 +185,21 @@ $ vim playbook4.yml
   hosts: webservers
   tasks:
    - name: install the latest version of Apache
-     yum:
+     ansible.builtin.yum:
        name: httpd
        state: latest
 
    - name: start Apache
-     shell: "service httpd start"
+     ansible.builtin.shell: "service httpd start"
 
 - name: Apache installation for ubuntuservers
   hosts: ubuntuservers
   tasks:
    - name: update
-     shell: "apt update -y"
+     ansible.builtin.shell: "apt update -y"
      
    - name: install the latest version of Apache
-     apt:
+     ansible.builtin.apt:
        name: apache2
        state: latest
 ```
@@ -219,7 +221,7 @@ $ vim playbook5.yml
   hosts: webservers
   tasks:
    - name: Remove Apache
-     yum:
+     ansible.builtin.yum:
        name: httpd
        state: absent
 
@@ -227,11 +229,11 @@ $ vim playbook5.yml
   hosts: ubuntuservers
   tasks:
    - name: Remove Apache
-     apt:
+     ansible.builtin.apt:
        name: apache2
        state: absent
    - name: Remove unwanted Apache2 packages from the system
-     apt:
+     ansible.builtin.apt:
        autoremove: yes
        purge: yes
 ```
@@ -253,17 +255,17 @@ vim playbook6.yml
   hosts: ubuntuservers
   tasks:
    - name: installing apache
-     apt:
+     ansible.builtin.apt:
        name: apache2
        state: latest
 
    - name: index.html
-     copy:
+     ansible.builtin.copy:
        content: "<h1>Hello Clarusway</h1>"
        dest: /var/www/html/index.html
 
    - name: restart apache2
-     service:
+     ansible.builtin.service:
        name: apache2
        state: restarted
        enabled: yes
@@ -272,7 +274,7 @@ vim playbook6.yml
   hosts: webservers
   tasks:
     - name: installing httpd and wget
-      yum:
+      ansible.builtin.yum:
         pkg: "{{ item }}"
         state: present
       loop:
@@ -297,12 +299,12 @@ vim playbook7.yml
   hosts: ubuntuservers
   tasks:
    - name: Uninstalling Apache
-     apt:
+     ansible.builtin.apt:
        name: apache2
        state: absent
        update_cache: yes
    - name: Remove unwanted Apache2 packages
-     apt:
+     ansible.builtin.apt:
        autoremove: yes
        purge: yes
 
@@ -310,7 +312,7 @@ vim playbook7.yml
   hosts: webservers
   tasks:
    - name: removing apache and wget
-     yum:
+     ansible.builtin.yum:
        pkg: "{{ item }}"
        state: absent
      loop:
@@ -335,7 +337,7 @@ vi playbook8.yml
 - name: Create users
   hosts: "*"
   tasks:
-    - user:
+    - ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
@@ -345,7 +347,7 @@ vi playbook8.yml
         - oliver
       when: ansible_os_family == "RedHat"
 
-    - user:
+    - ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
@@ -353,7 +355,7 @@ vi playbook8.yml
         - tyler
       when: ansible_os_family == "SUSE"
 
-    - user:
+    - ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
