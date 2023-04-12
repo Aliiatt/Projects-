@@ -33,8 +33,10 @@ At the end of this hands-on training, students will be able to;
 - Connect to the control node via SSH and run the following commands.
 
 ```bash
-sudo yum update -y
-sudo amazon-linux-extras install ansible2
+sudo dnf update -y
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+pip3 install --user ansible
 ```
 
 ### Confirm Installation
@@ -140,14 +142,14 @@ ec2-34-201-69-79.compute-1.amazonaws.com | SUCCESS => {
         "ansible_board_name": "NA",
         "ansible_board_serial": "NA",
 ```
-- create a playbook named "facts.yml"
+- create a playbook named ``facts.yml``
 
 ```yml
 - name: show facts
   hosts: all
   tasks:
     - name: print facts
-      debug:
+      ansible.builtin.debug:
         var: ansible_facts
 ```
 - run the play book
@@ -156,13 +158,13 @@ ec2-34-201-69-79.compute-1.amazonaws.com | SUCCESS => {
 $ ansible-playbook facts.yml
 ```
 
-- create a playbook named "ipaddress.yml"
+- create a playbook named ``ipaddress.yml``
 
 ```yml
 - hosts: all
   tasks:
   - name: show IP address
-    debug:
+    ansible.builtin.debug:
       msg: >
        This host uses IP address {{ ansible_facts.default_ipv4.address }}
 
@@ -175,7 +177,7 @@ ansible-playbook ipaddress.yml
 
 ## Part 3 - Working with sensitive data
 
-- Create encypted variables using "ansible-vault" command
+- Create encypted variables using ``ansible-vault`` command
 
 ```bash
 ansible-vault create secret.yml
@@ -203,7 +205,7 @@ $ cat secret.yml
 ```
 - how to use it:
 
-- create a file named "create-user"
+- create a file named ``create-user.yml``
 
 ```bash
 $ nano create-user.yml
@@ -218,7 +220,7 @@ $ nano create-user.yml
     - secret.yml
   tasks:
     - name: creating user
-      user:
+      ansible.builtin.user:
         name: "{{ username }}"
         password: "{{ password }}"
 ```
@@ -231,7 +233,7 @@ ansible-playbook create-user.yml
 ```bash
 ERROR! Attempting to decrypt but no vault secrets found
 ```
-- Run the playbook with "--ask-vault-pass" command:
+- Run the playbook with ``--ask-vault-pass`` command:
 
 ```bash
 $ ansible-playbook --ask-vault-pass create-user.yml
@@ -282,7 +284,7 @@ $ cat secret-1.yml
 ```
 - how to use it:
 
-- create a file named "create-user-1"
+- create a file named ``create-user-1.yml``
 
 ```bash
 $ nano create-user-1.yml
@@ -297,9 +299,9 @@ $ nano create-user-1.yml
     - secret-1.yml
   tasks:
     - name: creating user
-      user:
+      ansible.builtin.user:
         name: "{{ username }}"
-        password: "{{ pwhash | password_hash ('sha512') }}"     
+        password: "{{ pwhash | password_hash ('sha512') }}"    
 ``` 
 
 - run the plaaybook
@@ -382,7 +384,7 @@ $ nano ping-playbook.yml
   hosts: all
   tasks:
     - name: pinging
-      ping:
+      ansible.builtin.ping:
 ```
 
 - Run the command below for pinging the servers.
@@ -415,8 +417,8 @@ $ ansible-playbook ping-playbook.yml
 - install "boto3 and botocore"
 
 ```bash
-$ sudo yum install pip
-$ pip install --user boto3 botocore
+# sudo yum install pip
+pip install --user boto3 botocore
 ```
 
 - Create another file named ```inventory_aws_ec2.yml``` in the project directory.
@@ -457,7 +459,7 @@ $ ansible-inventory -i inventory_aws_ec2.yml --graph
 $ ansible all -m ping --key-file "~/<pem file>"
 ```
 
-- create a playbook name "user.yml"
+- create a playbook name ``user.yml``
 
 ```yml
 ---
@@ -469,7 +471,7 @@ $ ansible all -m ping --key-file "~/<pem file>"
     ansible_ssh_private_key_file: "/home/ec2-user/<pem file>"
   tasks:
     - name: create a user {{ user }}
-      user:
+      ansible.builtin.user:
         name: "{{ user }}"
 ```
 - run the playbook

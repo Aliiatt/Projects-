@@ -22,21 +22,9 @@ locals {
   user = "clarusway"
 }
 
-data "aws_ami" "amazon_linux2" {
-  most_recent      = true
-  owners           = ["amazon"]
 
-  filter {
-    name = "virtualization-type"
-    values = ["hvm"]
-  }
-  filter {
-    name = "name"
-    values = ["amzn2-ami-kernel-5.10*"]
-  }
-}
 resource "aws_instance" "nodes" {
-  ami = data.aws_ami.amazon_linux2.id
+  ami = var.myami
   instance_type = var.instancetype
   count = var.num
   key_name = var.mykey
@@ -98,8 +86,10 @@ resource "null_resource" "config" {
   provisioner "remote-exec" {
     inline = [
       "sudo hostnamectl set-hostname Control-Node",
-      "sudo yum update -y",
-      "sudo amazon-linux-extras install ansible2 -y",
+      "sudo dnf update -y",
+      "curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py",
+      "python3 get-pip.py --user",
+      "pip3 install --user ansible",
       "echo [webservers] >> inventory.txt",
       "echo node1 ansible_host=${aws_instance.nodes[1].private_ip} ansible_ssh_private_key_file=/home/ec2-user/${var.mykey}.pem ansible_user=ec2-user >> inventory.txt",
       "echo [dbservers] >> inventory.txt",
