@@ -78,7 +78,7 @@ touch ping-playbook.yml
   hosts: all
   tasks:
     - name: pinging
-      ping:
+      ansible.builtin.ping:
 ```
 
 - Run the command below for pinging the servers.
@@ -106,10 +106,10 @@ ansible-playbook ping-playbook.yml
 
   tasks:
     - name: set hostname
-      shell: "sudo hostnamectl set-hostname {{ hostname }}"
+      ansible.builtin.shell: "sudo hostnamectl set-hostname {{ hostname }}"
 
     - name: Installing Mysql  and dependencies
-      package:
+      ansible.builtin.package:
         name: "{{ item }}"
         state: present
         update_cache: yes
@@ -120,13 +120,13 @@ ansible-playbook ping-playbook.yml
         - libmysqlclient-dev
 
     - name: start and enable mysql service
-      service:
+      ansible.builtin.service:
         name: mysql
         state: started
         enabled: yes
 
     - name: creating mysql user
-      mysql_user:
+      community.mysql.mysql_user:
         name: "{{ db_user }}"
         password: "{{ db_password }}"
         priv: '*.*:ALL'
@@ -134,33 +134,33 @@ ansible-playbook ping-playbook.yml
         state: present
 
     - name: copy the sql script
-      copy:
-        src: ~/init.sql
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/init.sql
         dest: ~/
 
     - name: creating phonebook_db
-      mysql_db:
+      community.mysql.mysql_db:
         name: "{{ db_name }}"
         state: present
 
     - name: check if the database has the table
-      shell: |
+      ansible.builtin.shell: |
         echo "USE {{ db_name }}; show tables like '{{ db_table }}'; " | mysql
       register: resultOfShowTables
 
     - name: DEBUG
-      debug:
+      ansible.builtin.debug:
         var: resultOfShowTables
 
     - name: Import database table
-      mysql_db:
+      community.mysql.mysql_db:
         name: "{{ db_name }}"   # This is the database schema name.
         state: import  # This module is not idempotent when the state property value is import.
         target: ~/init.sql # This script creates the products table.
       when: resultOfShowTables.stdout == "" # This line checks if the table is already imported. If so this task doesn't run.
 
     - name: Enable remote login to mysql
-      lineinfile:
+      ansible.builtin.lineinfile:
          path: /etc/mysql/mysql.conf.d/mysqld.cnf
          regexp: '^bind-address'
          line: 'bind-address = 0.0.0.0'
@@ -170,7 +170,7 @@ ansible-playbook ping-playbook.yml
 
   handlers:
     - name: Restart mysql
-      service:
+      ansible.builtin.service:
         name: mysql
         state: restarted
 ```
@@ -204,11 +204,11 @@ ansible db_server -m shell -a "mysql --version"
     hostname: cw_web_server
   tasks:
     - name: set hostname
-      shell: "sudo hostnamectl set-hostname {{ hostname }}"
+      ansible.builtin.shell: "sudo hostnamectl set-hostname {{ hostname }}"
 
     - name: Installing python for python app
       become: yes
-      package:
+      ansible.builtin.package:
         name:
           - python3
           - python3-pip
@@ -216,28 +216,28 @@ ansible db_server -m shell -a "mysql --version"
         update_cache: yes
 
     - name: copy the app file to the web server
-      copy:
-        src: ~/phonebook-app.py
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/phonebook-app.py
         dest: ~/
 
     - name: copy the requirements file to the web server
-      copy:
-        src: ~/requirements.txt
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/requirements.txt
         dest: ~/
 
     - name: copy the templates folder to the web server
-      copy:
-        src: ~/templates
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/templates
         dest: ~/
 
     - name: install dependencies from requirements file
       become: yes
-      pip:
+      ansible.builtin.pip:
         requirements: /home/ubuntu/requirements.txt
 
     - name: run the app
       become: yes
-      shell: "nohup python3 phonebook-app.py &"
+      ansible.builtin.shell: "nohup python3 phonebook-app.py &"
 ```
 
 - Explain what these tasks and modules.
@@ -305,10 +305,10 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
 
 ```yml
     - name: set hostname
-      shell: "sudo hostnamectl set-hostname {{ hostname }}"
+      ansible.builtin.shell: "sudo hostnamectl set-hostname {{ hostname }}"
 
     - name: Installing Mysql  and dependencies
-      package:
+      ansible.builtin.package:
         name: "{{ item }}"
         state: present
         update_cache: yes
@@ -319,13 +319,13 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
         - libmysqlclient-dev
 
     - name: start and enable mysql service
-      service:
+      ansible.builtin.service:
         name: mysql
         state: started
         enabled: yes
 
     - name: creating mysql user
-      mysql_user:
+      community.mysql.mysql_user:
         name: "{{ db_user }}"
         password: "{{ db_password }}"
         priv: '*.*:ALL'
@@ -333,33 +333,33 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
         state: present
 
     - name: copy the sql script
-      copy:
-        src: ~/init.sql
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/init.sql
         dest: ~/
 
     - name: creating phonebook_db
-      mysql_db:
+      community.mysql.mysql_db:
         name: "{{ db_name }}"
         state: present
 
     - name: check if the database has the table
-      shell: |
+      ansible.builtin.shell: |
         echo "USE {{ db_name }}; show tables like '{{ db_table }}'; " | mysql
       register: resultOfShowTables
 
     - name: DEBUG
-      debug:
+      ansible.builtin.debug:
         var: resultOfShowTables
 
     - name: Import database table
-      mysql_db:
+      community.mysql.mysql_db:
         name: "{{ db_name }}"   # This is the database schema name.
         state: import  # This module is not idempotent when the state property value is import.
         target: ~/init.sql # This script creates the products table.
       when: resultOfShowTables.stdout == "" # This line checks if the table is already imported. If so this task doesn't run.
 
     - name: Enable remote login to mysql
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/mysql/mysql.conf.d/mysqld.cnf
         regexp: '^bind-address'
         line: 'bind-address = 0.0.0.0'
@@ -372,11 +372,11 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
 
 ```yml
     - name: set hostname
-      shell: "sudo hostnamectl set-hostname {{ hostname }}"
+      ansible.builtin.shell: "sudo hostnamectl set-hostname {{ hostname }}"
 
     - name: Installing python for python app
       become: yes
-      package:
+      ansible.builtin.package:
         name:
           - python3
           - python3-pip
@@ -384,28 +384,28 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
         update_cache: yes
 
     - name: copy the app file to the web server
-      copy:
-        src: ~/phonebook-app.py
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/phonebook-app.py
         dest: ~/
 
     - name: copy the requirements file to the web server
-      copy:
-        src: ~/requirements.txt
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/requirements.txt
         dest: ~/
 
     - name: copy the templates folder to the web server
-      copy:
-        src: ~/templates
+      ansible.builtin.copy:
+        src: /home/ubuntu/ansible-lesson/phonebook/templates
         dest: ~/
 
     - name: install dependencies from requirements file
       become: yes
-      pip:
+      ansible.builtin.pip:
         requirements: /home/ubuntu/requirements.txt
 
     - name: run the app
       become: yes
-      shell: "nohup python3 phonebook-app.py &"
+      ansible.builtin.shell: "nohup python3 phonebook-app.py &"
 ```
 
 - Explain what these tasks and modules.
@@ -418,18 +418,18 @@ mkdir tasks && cd tasks && touch db_tasks.yml web_tasks.yml
   hosts: db_server
   become: true
   tasks:
-    - include_tasks: ./tasks/db_tasks.yml
+    - ansible.builtin.include_tasks: ./tasks/db_tasks.yml
 
   handlers:
     - name: Restart mysql
-      service:
+      ansible.builtin.service:
         name: mysql
         state: restarted
 
 - name: run the web server
   hosts: web_server
   tasks:
-    - include_tasks: ./tasks/web_tasks.yml
+    - ansible.builtin.include_tasks: ./tasks/web_tasks.yml
 ```
 
 - Run the playbook.yaml
@@ -454,24 +454,24 @@ ansible-playbook playbook.yml
  # strategy: free
  # serial: 2
   tasks:
-    - debug:
+    - ansible.builtin.debug:
         msg: "task 1"
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "task 2"
 
 # our intention is to make node3 fail in the third task.
     - name: task 3
       become: true
-      apt:
+      ansible.builtin.apt:
         name: git
         state: present
    #   ignore_errors: true
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "task 4"
 
-    - debug:
+    - ansible.builtin.debug:
         msg: "task 5"
 ```
 
