@@ -4,7 +4,7 @@ variable "region" {}
 variable "mykey" {}
 variable "tags" {}
 variable "myami" {
-  description = "in order of; amazon linux 2, redhat enterprise linux 8, ubuntu 20.04"
+  description = "in order of; amazon linux 2023, redhat enterprise linux 9, ubuntu 22.04"
 }
 variable "instancetype" {}
 variable "num" {}

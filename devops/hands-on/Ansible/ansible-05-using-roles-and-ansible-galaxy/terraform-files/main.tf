@@ -85,7 +85,9 @@ resource "null_resource" "config" {
   provisioner "remote-exec" {
     inline = [
       "sudo hostnamectl set-hostname Control-Node",
-      "sudo yum install -y python3",
+      "sudo dnf update -y",
+      "curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py",
+      "python3 get-pip.py --user",
       "pip3 install --user ansible",
       "echo [servers] > inventory.txt",
       "echo web_server_1 ansible_host=${aws_instance.nodes[1].private_ip}  ansible_ssh_private_key_file=~/${var.mykey}.pem  ansible_user=ec2-user >> inventory.txt",

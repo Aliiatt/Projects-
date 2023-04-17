@@ -32,11 +32,10 @@ At the end of this hands-on training, students will be able to;
 - Run the commands below to install Python3 and Ansible. 
 
 ```bash
-$ sudo yum install -y python3 
-```
-
-```bash
-$ pip3 install --user ansible
+sudo dnf update -y
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python3 get-pip.py --user
+pip3 install --user ansible
 ```
 
 - Check Ansible's installation with the command below.
@@ -44,7 +43,6 @@ $ pip3 install --user ansible
 ```bash
 $ ansible --version
 ```
-
 
 - Run the command below to transfer your pem key to your Ansible Controller Node.
 
@@ -98,7 +96,7 @@ $ touch ping-playbook.yml
   hosts: all
   tasks:
     - name: pinging
-      ping:
+      ansible.builtin.ping:
 ```
 
 - Run the command below for pinging the servers.
@@ -131,17 +129,17 @@ vi tasks/main.yml
 
 ```yml
 - name: installing apache
-  yum:
+  ansible.builtin.yum:
     name: httpd
     state: latest
 
 - name: index.html
-  copy:
+  ansible.builtin.copy:
     content: "<h1>Hello Clarusway</h1>"
     dest: /var/www/html/index.html
 
 - name: restart apache2
-  service:
+  ansible.builtin.service:
     name: httpd
     state: restarted
     enabled: yes
@@ -203,11 +201,10 @@ Found 1494 roles matching your search. Showing first 1000.
  2kloc.trellis-monit                                          Install and configure Monit service in Trellis.
  ```
 
-
  - there are lots of. Lets filter them.
 
 ```bash
- $ ansible-galaxy search nginx --platform EL
+ansible-galaxy search nginx --platform EL
 ```
 "EL" for centos 
 
@@ -339,7 +336,7 @@ Stdout:
 * First install git to Control Node:
 
 ```bash
-sudo yum install git
+sudo dnf install git
 ```
 
 * Create a file which name is `role_requirements.yml`:
@@ -377,8 +374,7 @@ ansible-galaxy init /home/ec2-user/ansible/roles/common
 
 ```yml
 ---
--
-  hosts: instance_image
+- hosts: instance_image
   become: yes
   become_method: sudo  
 
@@ -387,7 +383,6 @@ ansible-galaxy init /home/ec2-user/ansible/roles/common
     - { role: ansible-role-ntp, ntp_timezone: UTC }
     - docker
     - ansible-prometheus-node-exporter
-
 ```
 
 * To apply this, first you need to configure your Inventory file, so add your Ubuntu instance private ip to inventory, give alias name "instance_image".
@@ -398,19 +393,19 @@ ansible-galaxy init /home/ec2-user/ansible/roles/common
 ---
 # tasks file for /home/ec2-user/ansible/roles/common/tasks/main.yml:
 - name: Common Tasks
-  debug:
+  ansible.builtin.debug:
     msg: Common Task Triggered
 
 - name: Fix dpkg
-  command: dpkg --configure -a
+  ansible.builtin.command: dpkg --configure -a
 
 - name: Update apt
-  apt:
+  ansible.builtin.apt:
     upgrade: dist
     update_cache: yes
 
 - name: Install packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   with_items:
@@ -421,8 +416,7 @@ ansible-galaxy init /home/ec2-user/ansible/roles/common
 
 ```yml
 ---
--
-  hosts: instance_image
+- hosts: instance_image
   become: yes
   become_method: sudo  
 
@@ -433,7 +427,7 @@ ansible-galaxy init /home/ec2-user/ansible/roles/common
     - ansible-prometheus-node-exporter
 
   tasks:
-   - import_tasks: './slack.yml'     
+   - ansible.builtin.import_tasks: './slack.yml'    
 ```
 
 ./slack.yml is like:
