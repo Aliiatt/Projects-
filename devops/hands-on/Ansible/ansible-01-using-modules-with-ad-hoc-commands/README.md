@@ -36,7 +36,7 @@ sudo amazon-linux-extras install ansible2
 - To confirm the successful installation of Ansible, run the following command.
 
 ```bash
-$ ansible --version
+ansible --version
 ```
 Stdout:
 ```
@@ -64,10 +64,10 @@ ansible 2.9.12
 - Along with the hands-on, public or private IPs can be used.
 
 ```bash
-$ sudo su
-$ cd /etc/ansible
-$ ls
-$ vim hosts
+sudo su
+cd /etc/ansible
+ls
+vim hosts
 [webservers]
 node1 ansible_host=<node1_ip> ansible_user=ec2-user
 node2 ansible_host=<node2_ip> ansible_user=ec2-user
@@ -87,7 +87,7 @@ ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 - Copy your pem file to the Control Node. First, go to your pem file directory on your local PC and run the following command.
 
 ```bash
-$ scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/ec2-user
+scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/ec2-user
 ```
 - Check if the file is transferred to the remote machine. 
 
@@ -101,16 +101,16 @@ $ scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/
 - To confirm that all our hosts are located by Ansible, we will run the commands below.
 
 ```bash
-$ ansible all --list-hosts
-$ ansible webservers --list-hosts
+ansible all --list-hosts
+ansible webservers --list-hosts
 ```
 
 - To make sure that all our hosts are reachable, we will run various ad-hoc commands that use the ping module.
 
 ```bash
-$ ansible all -m ping
-$ ansible webservers -m ping
-$ ansible node1 -m ping
+ansible all -m ping
+ansible webservers -m ping
+ansible node1 -m ping
 ```
 - Explain the content of the output. 
 
@@ -124,7 +124,7 @@ $ ansible node1 -m ping
 - Run the below command.
 
 ```bash
-$ ansible-doc ping
+ansible-doc ping
 ```
 - Emphasize that the successful pinging returns ```pong``` answer. 
 
@@ -135,7 +135,7 @@ $ ansible-doc ping
 - Run the command below.
 
 ```bash
-$ ansible all -m ping -o
+ansible all -m ping -o
 ```
 
 - Explain what ```-o``` option does.
@@ -145,7 +145,7 @@ $ ansible all -m ping -o
 - Go on with the following operations to get rid of the warning.
 
 ```bash
-$ vim ansible.cfg
+vim ansible.cfg
 ```
 
 - Add the following lines to ```/etc/ansible/ansible.cfg``` file. 
@@ -158,7 +158,7 @@ interpreter_python=auto_silent
 - Run the command below.
 
 ```bash
-$ ansible --help
+ansible --help
 ```
 
 - Show ```-o``` option on the screen. Also show the meanings of ```-a, -m, -i, --list-hosts, --become-user```.
@@ -166,7 +166,7 @@ $ ansible --help
 - Run the command below.
 
 ```bash
-$ ansible webservers -a "uptime"
+ansible webservers -a "uptime"
 web_server1 | CHANGED | rc=0 >>
  13:00:59 up 42 min,  1 user,  load average: 0.08, 0.02, 0.01
 ```
@@ -186,18 +186,18 @@ load average over the last 15 minutes: 1%
 - Run the command below.
 
 ```bash
-$ ansible webservers -m shell -a "systemctl status sshd"
+ansible webservers -m shell -a "systemctl status sshd"
 ```
 - Explain the output.
 
 - Run the command below.
 ```bash
-$ ansible webservers -m command -a 'df -h'
+ansible webservers -m command -a 'df -h'
 ```
 - Then run the same command without ```-m command``` part.
 
 ```bash
-$ ansible webservers -a 'df -h'
+ansible webservers -a 'df -h'
 ```
 
 - Mention about the fact that the default ad-hoc module is the command module.
@@ -205,13 +205,13 @@ $ ansible webservers -a 'df -h'
 - Run the commands below for explaining how to transfer a file.
 
 ```bash
-$ vi testfile    # Create a text file name "testfile"
+vi testfile    # Create a text file name "testfile"
   "This is a test file."
 ```
 
 ```bash
-$ ansible webservers -m copy -a "src=/etc/ansible/testfile dest=/home/ec2-user/testfile"
-$ ansible node1 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfile2 ; cat testfile2"
+ansible webservers -m copy -a "src=/etc/ansible/testfile dest=/home/ec2-user/testfile"
+ansible node1 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfile2 ; cat testfile2"
 ```
 
 - Connect to Node1 and show the files and their content.
@@ -223,7 +223,7 @@ $ ansible node1 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfile2 ; c
 - Append the ip to the hosts file as shown below. 
 
 ```bash
-$ vim hosts
+vim hosts
 ```
 ```bash
 [ubuntuserver]
@@ -233,9 +233,9 @@ node3 ansible_host=<node3_ip> ansible_user=ubuntu
 - Run the commands below.
 
 ```bash
-$ ansible all --list-hosts
-$ ansible all -m ping -o
-$ ansible all -m shell -a "echo Hello Clarusway > /home/ubuntu/testfile3"
+ansible all --list-hosts
+ansible all -m ping -o
+ansible all -m shell -a "echo Hello Clarusway > /home/ubuntu/testfile3"
 ```
 
 - Explain the error below. Emphasize that the infrastructures we provision need different configurations.
@@ -249,8 +249,8 @@ web_server2 | CHANGED | rc=0 >>
 - So refactor the commands as shown below.
 
 ```bash
-$ ansible node3 -m shell -a "echo Hello Clarusway > /home/ubuntu/testfile3"
-$ ansible node1:node2 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfile3"
+ansible node3 -m shell -a "echo Hello Clarusway > /home/ubuntu/testfile3"
+ansible node1:node2 -m shell -a "echo Hello Clarusway > /home/ec2-user/testfile3"
 ```
 
 - Emphasize the ```:``` sign between the hosts.
@@ -267,7 +267,7 @@ ansible webservers -b -m shell -a "amazon-linux-extras install -y nginx1 ; syste
 - Run the commands below for Ubuntu server
 
 ```bash
-$ ansible node3 -b -m shell -a "apt update -y ; apt-get install -y nginx ; systemctl start nginx; systemctl enable nginx"
+ansible node3 -b -m shell -a "apt update -y ; apt-get install -y nginx ; systemctl start nginx; systemctl enable nginx"
 ```
 
 - Visit both of the ip addresses to see the default nginx pages.
@@ -275,7 +275,7 @@ $ ansible node3 -b -m shell -a "apt update -y ; apt-get install -y nginx ; syste
 - Run the command below to remove the nginx package.
 
 ```bash
-$ ansible webservers -b -m shell -a "yum -y remove nginx"
+ansible webservers -b -m shell -a "yum -y remove nginx"
 ```
 
 ### Using Yum and Package Module
@@ -283,7 +283,7 @@ $ ansible webservers -b -m shell -a "yum -y remove nginx"
 - Run the command below.
 
 ```bash
-$ ansible-doc yum
+ansible-doc yum
 ```
 
 - Emphasize the description part of the yum command.
@@ -295,7 +295,7 @@ $ ansible-doc yum
 - Run the command below ```twice```.
 
 ```bash
-$ ansible webservers -b -m yum -a "name=nginx state=present"    
+ansible webservers -b -m yum -a "name=nginx state=present"    
 ```
 
 -  Explain the difference of the standard outputs. Emphasize the changes in color and ```changed``` property together with idempotency. 
@@ -303,7 +303,7 @@ $ ansible webservers -b -m yum -a "name=nginx state=present"
 - Run the command below.
 
 ```bash
-$ ansible -b -m package -a "name=nginx state=present" all
+ansible -b -m package -a "name=nginx state=present" all
 ```
 
 - Connect to nodes and check if nginx was installed. (nginx -v)
@@ -318,7 +318,7 @@ $ ansible -b -m package -a "name=nginx state=present" all
 - Edit the file as shown below:
 
 ```bash
-$ vim inventory
+vim inventory
 ```
 ```bash
 
