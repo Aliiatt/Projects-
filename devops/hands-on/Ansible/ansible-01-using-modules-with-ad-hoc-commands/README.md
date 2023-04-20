@@ -76,7 +76,7 @@ node2 ansible_host=<node2_ip> ansible_user=ec2-user
 ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 ```
 
-- Explain what ```ansible_host```, ```ansible_user``` and ansible_ssh_key_file parameters are. For this reason visit the Ansible's [inventory parameters web site](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters).
+- Explain what ```ansible_host```, ```ansible_user``` and ```ansible_ssh_key_file``` parameters are. For this reason visit the Ansible's [inventory parameters web site](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#connecting-to-hosts-behavioral-inventory-parameters).
 
 - Explain what an ```alias``` (node1 and node2) is and where we use it.
 
