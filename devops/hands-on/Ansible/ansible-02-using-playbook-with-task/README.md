@@ -43,6 +43,7 @@ ansible --version
 
 ```bash
 sudo su
+mkdir /etc/ansible
 cd /etc/ansible
 ls
 vim hosts
