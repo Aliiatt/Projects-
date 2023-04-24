@@ -35,17 +35,17 @@ pip3 install --user ansible
 - To confirm the successful installation of Ansible. You can run the following command.
 
 ```bash
-$ ansible --version
+ansible --version
 ```
 ### Configure Ansible on AWS EC2
 
 - Connect to the control node and for this basic inventory, edit /etc/ansible/hosts, and add a few remote systems (manage nodes) to the end of the file. For this example, use the IP addresses of the servers.
 
 ```bash
-$ sudo su
-$ cd /etc/ansible
-$ ls
-$ vim hosts
+sudo su
+cd /etc/ansible
+ls
+vim hosts
 ```
 ```bash
 [webservers]
@@ -62,7 +62,7 @@ ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 - Edit /etc/ansible/ansible.cfg as adding below. 
 
 ```bash
-$ vim ansible.cfg
+vim ansible.cfg
 [defaults]
 interpreter_python=auto_silent
 
@@ -73,7 +73,7 @@ host_key_checking = False
 - Copy your pem file to the /etc/ansible/ directory. First go to your pem file directory on your local computer and run the following command.
 
 ```bash
-$ scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/home/ec2-user
+scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/home/ec2-user
 ```
 
 - or you can create a file name <pem file> into the directory /etc/ansible on the control node and copy your pem file into it.
@@ -130,7 +130,7 @@ ansible-playbook playbook2.yml
 - Create a yaml file named playbook3.yml as below.
 
 ```bash
-$ vim playbook3.yml
+vim playbook3.yml
 ```
 ```yml
 - name: Copy for linux
@@ -173,10 +173,10 @@ ansible-playbook playbook3.yml
 - Install Apache server with "playbook4.yml". After the installation, check if the Apache server is reachable from the browser.
 
 ```bash
-$ ansible-doc yum
-$ ansible-doc apt
+ansible-doc yum
+ansible-doc apt
 
-$ vim playbook4.yml
+vim playbook4.yml
 ```
 ```yml
 ---
@@ -205,14 +205,14 @@ $ vim playbook4.yml
 - Run the yaml file.
 
 ```bash
-$ ansible-playbook -b playbook4.yml
-$ ansible-playbook -b playbook4.yml   # Run the command again and show the changing parts of the output.
+ansible-playbook -b playbook4.yml
+ansible-playbook -b playbook4.yml   # Run the command again and show the changing parts of the output.
 ```
 
 - Create playbook5.yml and remove the Apache server from the hosts.
 
 ```bash
-$ vim playbook5.yml
+vim playbook5.yml
 ```
 ```yml
 ---
@@ -240,7 +240,7 @@ $ vim playbook5.yml
 - Run the yaml file.
 
 ```bash
-$ ansible-playbook -b playbook5.yml
+ansible-playbook -b playbook5.yml
 ```
 
 - This time, install Apache and wget together with playbook6.yml. After the installation, enter the IP-address of node2 to the browser and show the Apache server. Then, connect node1 with SSH and check if "wget and apache server" are running. 
