@@ -224,6 +224,7 @@ vim playbook5.yml
      ansible.builtin.yum:
        name: httpd
        state: absent
+       autoremove: yes
 
 - name: Remove Apache from ubuntuservers
   hosts: ubuntuservers
@@ -232,8 +233,6 @@ vim playbook5.yml
      ansible.builtin.apt:
        name: apache2
        state: absent
-   - name: Remove unwanted Apache2 packages from the system
-     ansible.builtin.apt:
        autoremove: yes
        purge: yes
 ```
