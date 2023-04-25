@@ -329,7 +329,8 @@ vi playbook8.yml
 - name: Create users
   hosts: "*"
   tasks:
-    - ansible.builtin.user:
+    - name: Create user for REDHAT OS FAMILY
+      ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
@@ -339,7 +340,8 @@ vi playbook8.yml
         - oliver
       when: ansible_os_family == "RedHat"
 
-    - ansible.builtin.user:
+    - name: Create user for SUSE OS FAMILY
+      ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
@@ -347,7 +349,8 @@ vi playbook8.yml
         - tyler
       when: ansible_os_family == "SUSE"
 
-    - ansible.builtin.user:
+    - name: Create user for DEBIAN OS FAMILY
+      ansible.builtin.user:
         name: "{{ item }}"
         state: present
       loop:
