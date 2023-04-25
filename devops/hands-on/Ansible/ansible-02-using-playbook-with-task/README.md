@@ -39,14 +39,10 @@ ansible --version
 ```
 ### Configure Ansible on AWS EC2
 
-- Connect to the control node and for this basic inventory, edit /etc/ansible/hosts, and add a few remote systems (manage nodes) to the end of the file. For this example, use the IP addresses of the servers.
+- Connect to the control node and create an inventory.
 
 ```bash
-sudo su
-mkdir /etc/ansible
-cd /etc/ansible
-ls
-vim hosts
+vim inventory.txt
 ```
 ```bash
 [webservers]
@@ -60,24 +56,24 @@ node3 ansible_host=<node2_ip> ansible_user=ubuntu
 ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 ```
 
-- Edit /etc/ansible/ansible.cfg as adding below. 
+- Create an  `ansible.cfg` file under `/home/ec2-user` folder as below. 
 
 ```bash
 vim ansible.cfg
 [defaults]
-interpreter_python=auto_silent
-
-# uncomment this to disable SSH key host checking
 host_key_checking = False
+inventory = inventory.txt
+deprecation_warnings=False
+interpreter_python=auto_silent
 ```
 
-- Copy your pem file to the /etc/ansible/ directory. First go to your pem file directory on your local computer and run the following command.
+- Copy your pem file to the `/home/ec2-user` directory. First go to your pem file directory on your local computer and run the following command.
 
 ```bash
 scp -i <pem file> <pem file> ec2-user@<public DNS name of the control node>:/home/ec2-user
 ```
 
-- or you can create a file name <pem file> into the directory /etc/ansible on the control node and copy your pem file into it.
+- or you can create a file name <pem file> into the directory `/home/ec2-user` on the control node and copy your pem file into it.
 
 ## Part 2 - Ansible Playbooks
 
@@ -117,7 +113,6 @@ ansible-playbook playbook1.yml
      ansible.builtin.copy:
        src: /home/ec2-user/testfile1
        dest: /home/ubuntu/testfile1
-
 ```
 
 - Run the yaml file.
@@ -250,7 +245,7 @@ vim playbook6.yml
 ```
 ```yml
 ---
-- name: play 4
+- name: Apache installation and configuration for ubuntuservers
   hosts: ubuntuservers
   tasks:
    - name: installing apache
@@ -269,7 +264,7 @@ vim playbook6.yml
        state: restarted
        enabled: yes
 
-- name: play 5
+- name: Apache and wget installation for webservers
   hosts: webservers
   tasks:
     - name: installing httpd and wget
@@ -294,7 +289,7 @@ vim playbook7.yml
 ```
 ```yml
 ---
-- name: play 6
+- name: Remove Apache from ubuntuservers
   hosts: ubuntuservers
   tasks:
    - name: Uninstalling Apache
@@ -302,12 +297,10 @@ vim playbook7.yml
        name: apache2
        state: absent
        update_cache: yes
-   - name: Remove unwanted Apache2 packages
-     ansible.builtin.apt:
        autoremove: yes
        purge: yes
 
-- name: play 7
+- name: Remove Apache and wget from webservers
   hosts: webservers
   tasks:
    - name: removing apache and wget
