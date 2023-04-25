@@ -157,7 +157,7 @@ vim playbook3.yml
   tasks:
    - name: Copy using inline content
      ansible.builtin.copy:
-       content: '# This file was moved to /etc/ansible/testfile2'
+       content: 'This is content of file2'
        dest: /home/ec2-user/testfile2
 
    - name: Create a new text file
