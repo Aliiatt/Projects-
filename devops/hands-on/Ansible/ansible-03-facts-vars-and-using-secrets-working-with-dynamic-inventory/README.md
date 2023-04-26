@@ -44,7 +44,7 @@ pip3 install --user ansible
 - To confirm the successful installation of Ansible, run the following command.
 
 ```bash
-$ ansible --version
+ansible --version
 ```
 Stdout:
 ```
@@ -72,10 +72,10 @@ ansible 2.9.12
 - Along with the hands-on, public or private IPs can be used.
 
 ```bash
-$ sudo su
-$ cd /etc/ansible
-$ ls
-$ vim hosts
+sudo su
+cd /etc/ansible
+ls
+vim hosts
 [webservers]
 node1 ansible_host=<node1_ip> ansible_user=ec2-user
 
@@ -97,7 +97,7 @@ ansible_ssh_private_key_file=/home/ec2-user/<pem file>
 - Copy your pem file to the /home/ec2-user directory. First, go to your pem file directory on your local PC and run the following command.
 
 ```bash
-$ scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/ec2-user
+scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/ec2-user
 ```
 - Check if the file is transferred to the remote machine. 
 
@@ -108,11 +108,11 @@ $ scp -i <pem file> <pem file> ec2-user@<public DNS name of Control Node>:/home/
 - To make sure that all our hosts are reachable, we will run various ad-hoc commands that use the ping module.
 
 ```bash
-$ chmod 400 <pem file>
+chmod 400 <pem file>
 ```
 
 ```bash
-$ ansible all -m ping -o
+ansible all -m ping -o
 ```
 
 ## Part 2 - Ansible Facts
@@ -120,7 +120,7 @@ $ ansible all -m ping -o
 - Gathering Facts:
 
 ```bash
-$ ansible node1 -m setup
+ansible node1 -m setup
 ```
 ```
 ec2-34-201-69-79.compute-1.amazonaws.com | SUCCESS => {
@@ -155,7 +155,7 @@ ec2-34-201-69-79.compute-1.amazonaws.com | SUCCESS => {
 - run the play book
 
 ```bash
-$ ansible-playbook facts.yml
+ansible-playbook facts.yml
 ```
 
 - create a playbook named ``ipaddress.yml``
@@ -194,7 +194,7 @@ password: 99abcd
 - look at the content
 
 ```bash
-$ cat secret.yml
+cat secret.yml
 ```
 ```
 33663233353162643530353634323061613431366332373334373066353263353864643630656338
@@ -208,7 +208,7 @@ $ cat secret.yml
 - create a file named ``create-user.yml``
 
 ```bash
-$ nano create-user.yml
+nano create-user.yml
 ```
 
 ```yml
@@ -235,7 +235,7 @@ ERROR! Attempting to decrypt but no vault secrets found
 - Run the playbook with ``--ask-vault-pass`` command:
 
 ```bash
-$ ansible-playbook --ask-vault-pass create-user.yml
+ansible-playbook --ask-vault-pass create-user.yml
 ```
 Vault password: xxxx
 
@@ -272,7 +272,7 @@ pwhash: 14abcd
 - look at the content
 
 ```bash
-$ cat secret-1.yml
+cat secret-1.yml
 ```
 ```
 33663233353162643530353634323061613431366332373334373066353263353864643630656338
@@ -286,7 +286,7 @@ $ cat secret-1.yml
 - create a file named ``create-user-1.yml``
 
 ```bash
-$ nano create-user-1.yml
+nano create-user-1.yml
 
 ```
 
@@ -307,7 +307,7 @@ $ nano create-user-1.yml
 
 
 ```bash
-$ ansible-playbook --ask-vault-pass create-user-1.yml
+ansible-playbook --ask-vault-pass create-user-1.yml
 ```
 Vault password: xxxx
 
@@ -338,14 +338,14 @@ tyler:#665fffgkg6&fkg689##2£6466?%^^+&%+:18569:0:99999:7:::
 - Make a directory named ```dynamic-inventory``` under the home directory and cd into it.
 
 ```bash 
-$ mkdir dynamic-inventory
-$ cd dynamic-inventory
+mkdir dynamic-inventory
+cd dynamic-inventory
 ```
 
 - Create a file named ```inventory.txt``` with the command below.
 
 ```bash
-$ nano inventory.txt
+nano inventory.txt
 ```
 
 - Paste the content below into the inventory.txt file.
@@ -360,7 +360,7 @@ web_server  ansible_host=<YOUR-WEB-SERVER-IP>  ansible_user=ec2-user  ansible_ss
 - Create file named ```ansible.cfg``` under the the ```dynamic-inventory``` directory.
 
 ```bash
-$ nano ansible.cfg
+nano ansible.cfg
 ```
 
 ```cfg
@@ -375,7 +375,7 @@ private_key_file=~/<pem file>
 - Create a file named ```ping-playbook.yml``` and paste the content below.
 
 ```bash
-$ nano ping-playbook.yml
+nano ping-playbook.yml
 ```
 
 ```yml
@@ -389,7 +389,7 @@ $ nano ping-playbook.yml
 - Run the command below for pinging the servers.
 
 ```bash
-$ ansible-playbook ping-playbook.yml
+ansible-playbook ping-playbook.yml
 ```
 
 - Explain the output of the above command.
@@ -399,7 +399,7 @@ $ ansible-playbook ping-playbook.yml
 - Run the command below for pinging the servers.
 
 ```bash
-$ ansible-playbook ping-playbook.yml
+ansible-playbook ping-playbook.yml
 ```
 ### Working with dynamic inventory
 
@@ -423,7 +423,7 @@ pip install --user boto3 botocore
 - Create another file named ```inventory_aws_ec2.yml``` in the project directory.
 
 ```bash
-$ nano inventory_aws_ec2.yml
+nano inventory_aws_ec2.yml
 ```
 
 ```yml
@@ -439,7 +439,7 @@ compose:
 - see the inventory
 
 ```bash
-$ ansible-inventory -i inventory_aws_ec2.yml --graph
+ansible-inventory -i inventory_aws_ec2.yml --graph
 ```
 
 ```
@@ -455,7 +455,7 @@ $ ansible-inventory -i inventory_aws_ec2.yml --graph
 - To make sure that all our hosts are reachable with dynamic inventory, we will run various ad-hoc commands that use the ping module.
 
 ```bash
-$ ansible all -m ping --key-file "~/<pem file>"
+ansible all -m ping --key-file "~/<pem file>"
 ```
 
 - create a playbook name ``user.yml``
@@ -476,9 +476,9 @@ $ ansible all -m ping --key-file "~/<pem file>"
 - run the playbook
 
 ```bash
-$ ansible-playbook user.yml -i inventory_aws_ec2.yml
+ansible-playbook user.yml -i inventory_aws_ec2.yml
 ```
 
 ```bash
-$ ansible all -a "tail -2 /etc/passwd"
+ansible all -a "tail -2 /etc/passwd"
 ```
