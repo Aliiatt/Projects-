@@ -167,8 +167,8 @@ $ ansible-playbook facts.yml
     ansible.builtin.debug:
       msg: >
        This host uses IP address {{ ansible_facts.default_ipv4.address }}
-
 ```
+
 - run the playbook
 
 ```bash
@@ -209,7 +209,6 @@ $ cat secret.yml
 
 ```bash
 $ nano create-user.yml
-
 ```
 
 ```yml
