@@ -424,7 +424,6 @@ keyed_groups:
   - key: tags.Name
 compose:
   ansible_host: public_ip_address
-
 ```
 - see the inventory
 
