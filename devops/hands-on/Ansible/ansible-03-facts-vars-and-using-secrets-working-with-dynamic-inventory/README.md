@@ -366,11 +366,10 @@ nano ansible.cfg
 ```cfg
 [defaults]
 host_key_checking = False
-inventory=/etc/ansible/hosts
+inventory=/home/ec2-user/dynamic-inventory/inventory.txt
 interpreter_python=auto_silent
 private_key_file=~/<pem file>
 ```
-
 
 - Create a file named ```ping-playbook.yml``` and paste the content below.
 
@@ -392,15 +391,6 @@ nano ping-playbook.yml
 ansible-playbook ping-playbook.yml
 ```
 
-- Explain the output of the above command.
-
-- Change the inventory's value in ansible.cfg file to inventory.txt. 'inventory=/home/ec2-user/dynamic-inventory/inventory.txt'
-
-- Run the command below for pinging the servers.
-
-```bash
-ansible-playbook ping-playbook.yml
-```
 ### Working with dynamic inventory
 
 - go to AWS Management Consol and select the IAM roles:
