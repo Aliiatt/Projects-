@@ -151,6 +151,10 @@ ec2-34-201-69-79.compute-1.amazonaws.com | SUCCESS => {
     - name: print facts
       ansible.builtin.debug:
         var: ansible_facts
+
+    - name: print hostname
+      ansible.builtin.debug:
+        var=ansible_facts["hostname"]
 ```
 - run the play book
 
