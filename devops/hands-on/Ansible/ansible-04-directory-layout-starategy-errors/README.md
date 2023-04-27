@@ -1,4 +1,4 @@
-# Hands-on Ansible-04: Creating directory layout, error handling and controlling execution with starategies in ansible
+# Hands-on Ansible-04: Creating directory layout, error handling and controlling execution with strategies in ansible
 
 The purpose of this hands-on training is to give students the knowledge of best parctices in ansible playbooks.
 
