@@ -16,16 +16,12 @@ At the end of this hands-on training, students will be able to;
 
 - Part 3 - Using Ansible Roles from Ansible Galaxy
 
-
-
 ## Part 1 - Install Ansible
-
 
 - Spin-up 3 Amazon Linux 2 instances and name them as:
     1. control node -->(SSH PORT 22)(Linux)
     2. web_sever_1 ----> (SSH PORT 22, HTTP PORT 80)(Red Hat)
     3. web_server_2 ----> (SSH PORT 22, HTTP PORT 80)(Ubuntu)
-
 
 - Connect to the control node via SSH and run the following commands.
 
@@ -41,7 +37,7 @@ pip3 install --user ansible
 - Check Ansible's installation with the command below.
 
 ```bash
-$ ansible --version
+ansible --version
 ```
 
 - Run the command below to transfer your pem key to your Ansible Controller Node.
@@ -50,18 +46,17 @@ $ ansible --version
 scp -i ~/.ssh/walter-pem.pem ~/.ssh/walter-pem.pem ec2-user@54.197.164.241:/home/ec2-user
 ```
 
-
 - Make a directory named ```working-with-roles``` under the home directory and cd into it.
 
 ```bash 
-$ mkdir working-with-roles
-$ cd working-with-roles
+mkdir working-with-roles
+cd working-with-roles
 ```
 
 - Create a file named ```inventory.txt``` with the command below.
 
 ```bash
-$ vi inventory.txt
+vi inventory.txt
 ```
 
 - Paste the content below into the inventory.txt file.
@@ -84,11 +79,10 @@ interpreter_python=auto_silent
 roles_path = /home/ec2-user/ansible/roles/
 ```
 
-
 - Create a file named ```ping-playbook.yml``` and paste the content below.
 
 ```bash
-$ touch ping-playbook.yml
+touch ping-playbook.yml
 ```
 
 ```yml
@@ -102,11 +96,10 @@ $ touch ping-playbook.yml
 - Run the command below for pinging the servers.
 
 ```bash
-$ ansible-playbook ping-playbook.yml
+ansible-playbook ping-playbook.yml
 ```
 
 - Explain the output of the above command.
-
 
 ## Part 2 - Using Ansible Roles
 
@@ -119,7 +112,7 @@ ansible-galaxy init /home/ec2-user/ansible/roles/apache
 ```bash
 cd /home/ec2-user/ansible/roles/apache
 ll
-sudo yum install tree
+sudo dnf install tree -y
 tree
 ```
 
@@ -147,8 +140,10 @@ vi tasks/main.yml
 
 - Create a playbook named `role1.yml`.
 
+```bash
 cd /home/ec2-user/working-with-roles/
 vi role1.yml
+```
 
 ```yml
 ---
@@ -162,10 +157,8 @@ vi role1.yml
 - Run the command below 
 
 ```bash
-$ ansible-playbook role1.yml
+ansible-playbook role1.yml
 ```
-
-- (if you will use same server, uninstall the apache)
 
 ## Part 3 - Using Ansible Roles from Ansible Galaxy
 
@@ -182,11 +175,11 @@ $ ansible-playbook role1.yml
 - Go to command line and write:
 
 ```bash
-$ ansible-galaxy search nginx
+ansible-galaxy search nginx
 
 
 Stdout:
-```
+
 Found 1494 roles matching your search. Showing first 1000.
 
  Name                                                         Description
@@ -211,7 +204,7 @@ ansible-galaxy search nginx --platform EL
 - Lets go more specific :
 
 ```bash
-$ ansible-galaxy search nginx --platform EL | grep geerl
+ansible-galaxy search nginx --platform EL | grep geerl
 
 Stdout:
 
@@ -223,7 +216,7 @@ geerlingguy.varnish                                          Varnish for Linux.
 - Install it:
 
 ```bash
-$ ansible-galaxy install geerlingguy.nginx
+ansible-galaxy install geerlingguy.nginx
 
 Stdout:
 
@@ -236,9 +229,10 @@ Stdout:
 - Inspect the role:
 
 ```bash
-$ cd /home/ec2-user/ansible/roles/geerlingguy.nginx
+cd /home/ec2-user/ansible/roles/geerlingguy.nginx
 
-$ ls
+ls
+
 defaults  handlers  LICENSE  meta  molecule  README.md  tasks  templates  vars
 
 $ cd tasks
@@ -248,7 +242,7 @@ main.yml             setup-Debian.yml   setup-OpenBSD.yml  setup-Ubuntu.yml
 setup-Archlinux.yml  setup-FreeBSD.yml  setup-RedHat.yml   vhosts.yml
 ```
 ```bash
-$ vi main.yml
+vi main.yml
 ```
 ```yml
 ---
@@ -311,13 +305,13 @@ $ vi main.yml
 - Run the playbook.
 
 ```bash
-$ ansible-playbook playbook-nginx.yml
+ansible-playbook playbook-nginx.yml
 ```
 
 - List the roles you have:
 
 ```bash
-$ ansible-galaxy list
+ansible-galaxy list
 
 Stdout:
 
@@ -329,7 +323,7 @@ Stdout:
 
 * Assume that we need to create an custom AMI. At this AMI we want to use some software such as docker and prometheus. So in our project, every instance will be created with this AMI. We are also planning to update this AMI every 6 months. So we can update docker and prometheus software versions after 6 months. We need to re-usable configs to do that. Lets talk about this situation.
 
-* First create a new EC2 instance with Ubuntu 20.04 instance image. AMI Number: ami-08d4ac5b634553e16
+* First create a new EC2 instance with Ubuntu 20.04 instance image. AMI Number: ami-0aa2b7722dc1b5612
 
 * We will create yaml to download ansible roles, 
 
