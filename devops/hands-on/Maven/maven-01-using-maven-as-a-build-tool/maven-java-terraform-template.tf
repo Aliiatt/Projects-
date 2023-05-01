@@ -15,7 +15,7 @@ locals {
   user      = "clarusway"
 }
 
-data "aws_ami" "amazon_linux2" {
+data "aws_ami" "al2023" {
   most_recent      = true
   owners           = ["amazon"]
 
@@ -25,14 +25,13 @@ data "aws_ami" "amazon_linux2" {
   }
   filter {
     name = "name"
-    values = ["amzn2-ami-kernel-5.10*"]
+    values = ["al2023-ami-2023*"]
   }
 }
 
 resource "aws_instance" "maven-ec2" {
-  ami             = data.aws_ami.amazon_linux2.id
+  ami             = data.aws_ami.al2023.id
   instance_type   = local.inst_type
-    //  Write your own pem file name
   key_name        = local.pem
   vpc_security_group_ids = [aws_security_group.tf-sec-gr.id]
 
@@ -42,10 +41,10 @@ resource "aws_instance" "maven-ec2" {
 
   user_data = <<-EOF
                 #! /bin/bash
-                sudo yum update -y
-                sudo yum install java-11-amazon-corretto -y
+                dnf update -y
+                dnf install java-11-amazon-corretto -y
                 cd /home/ec2-user/
-                wget https://ftp.itu.edu.tr/Mirror/Apache/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
+                wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
                 tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
                 rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
                 echo "M2_HOME=/home/ec2-user/$(ls | grep apache-maven)" >> /home/ec2-user/.bash_profile

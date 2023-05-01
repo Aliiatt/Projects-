@@ -2,7 +2,6 @@
 
 Purpose of the this hands-on training is to teach the students how to use Maven with Java as a build tool.
 
-
 ## Learning Outcomes
 
 At the end of the this hands-on training, students will be able to;
@@ -58,7 +57,6 @@ mvn --version
 sudo reboot
 ```
 
-
 ## Part 2 - Generate a Java application using Maven's Archetype Plugin
 
 - Run the command below to produce an outline of a Java project with Maven.
@@ -72,7 +70,7 @@ mvn archetype:generate -DgroupId=com.clarus.maven -DartifactId=maven-experiment 
 - Run the command below to be able to use tree command.
 
 ```bash
-sudo yum install -y tree
+sudo dnf install -y tree
 ```
 
 - Run the command below to show the directory structure of the project.
@@ -243,7 +241,7 @@ mvn clean site
 - Run the command below to install Apache Server.
 
 ```bash
-sudo yum install -y httpd
+sudo dnf install -y httpd
 sudo systemctl start httpd
 sudo systemctl enable httpd
 ```
