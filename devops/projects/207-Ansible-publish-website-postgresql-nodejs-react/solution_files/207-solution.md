@@ -401,7 +401,7 @@ cd ~/ansible
         name: "yum-utils"
         state: latest
 
-  # set up the repository (`yum_repository` modülü de kullanılabilir.)
+  # set up the repository (`yum_repository` modul can be used.)
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
@@ -559,7 +559,7 @@ cd ~/ansible
         name: "yum-utils"
         state: latest
 
-  # set up the repository (`yum_repository` modülü de kullanılabilir.)
+  # set up the repository (`yum_repository` modul can be used.)
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
@@ -663,7 +663,7 @@ ansible-playbook docker_react.yml
         name: "yum-utils"
         state: latest
 
-  # set up the repository (`yum_repository` modülü de kullanılabilir.)
+  # set up the repository (`yum_repository` modul can be used.)
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
@@ -884,7 +884,7 @@ ansible-galaxy init react
         name: "yum-utils"
         state: latest
 
-  # set up the repository (`yum_repository` modülü de kullanılabilir.)
+  # set up the repository (`yum_repository` modul can be used.)
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
