@@ -222,7 +222,7 @@ cd ~/ansible
         name: "yum-utils"
         state: latest
 
-  # set up the repository (`yum_repository` modülü de kullanılabilir.)
+  # set up the repository (`yum_repository` modul can be used)
     - name: Add Docker repo
       ansible.builtin.get_url:
         url: https://download.docker.com/linux/centos/docker-ce.repo
