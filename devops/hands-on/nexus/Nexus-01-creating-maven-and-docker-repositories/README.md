@@ -55,26 +55,15 @@ sudo yum update -y
 Nexus and Maven are Java based application, so to run Nexus and Maven we have to install Java on the server.
 
 ```
-sudo yum install java-1.8.0-openjdk -y
+sudo yum install java-11-amazon-corretto -y
 java -version
 ```
 
 - Download and install Maven:
 
 ```
-sudo wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
-
-ls /etc/yum.repos.d/
-```
-
-```
-sudo sed -i s/\$releasever/7/g /etc/yum.repos.d/epel-apache-maven.repo
-```
-
-```
-sudo yum install apache-maven -y
-mvn -version
-whereis mvn
+wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
+mvn -v
 ```
 
 - Download and install Nexus.
