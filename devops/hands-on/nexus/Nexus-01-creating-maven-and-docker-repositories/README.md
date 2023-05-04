@@ -110,7 +110,7 @@ ll
 - Tell nexus that the ec2-user is going to be running the service. Edit the nexus.rc file with this `run_as_user="ec2-user"` content:
 
 ```
-nano /opt/nexus/bin/nexus.rc
+sudo nano /opt/nexus/bin/nexus.rc
 ```
 
 ```
