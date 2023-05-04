@@ -36,7 +36,7 @@ At the end of this hands-on training, students will be able to;
 
 ## Part 1 : Start Nexus Repository and Create Credentials
 
-- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
+- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI (ami-03c7d01cf4dedc891) with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
 
 - Connect to your instance with SSH:
 
@@ -52,7 +52,7 @@ sudo yum update -y
 
 
 - Install Java:
-Maven is Java based application, so to run Maven we have to install Java on the server.
+Nexus and Maven is Java based application, so to run Nexus and Maven we have to install Java on the server.
 
 ```
 sudo yum install java-1.8.0-openjdk -y
