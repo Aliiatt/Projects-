@@ -36,7 +36,7 @@ At the end of this hands-on training, students will be able to;
 
 ## Part 1 : Start Nexus Repository and Create Credentials
 
-- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2023 AMI with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
+- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
 
 - Connect to your instance with SSH:
 
@@ -52,18 +52,29 @@ sudo yum update -y
 
 
 - Install Java:
-Nexus and Maven are Java based application, so to run Nexus and Maven we have to install Java on the server.
+Maven is Java based application, so to run Maven we have to install Java on the server.
 
 ```
-sudo yum install java-11-amazon-corretto -y
+sudo yum install java-1.8.0-openjdk -y
 java -version
 ```
 
 - Download and install Maven:
 
 ```
-wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
-mvn -v
+sudo wget https://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+
+ls /etc/yum.repos.d/
+```
+
+```
+sudo sed -i s/\$releasever/7/g /etc/yum.repos.d/epel-apache-maven.repo
+```
+
+```
+sudo yum install apache-maven -y
+mvn -version
+whereis mvn
 ```
 
 - Download and install Nexus.
@@ -99,7 +110,7 @@ ll
 - Tell nexus that the ec2-user is going to be running the service. Edit the nexus.rc file with this `run_as_user="ec2-user"` content:
 
 ```
-sudo nano /opt/nexus/bin/nexus.rc
+nano /opt/nexus/bin/nexus.rc
 ```
 
 ```
