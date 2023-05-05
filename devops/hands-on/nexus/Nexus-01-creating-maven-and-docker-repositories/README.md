@@ -36,7 +36,7 @@ At the end of this hands-on training, students will be able to;
 
 ## Part 1 : Start Nexus Repository and Create Credentials
 
-- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI (ami-03c7d01cf4dedc891) with security group allowing `SSH (22)` and `Nexus Port (8081)` connections.
+- Launch a t2.medium (Nexus needs 8 GB of RAM) EC2 instance using the Amazon Linux 2 AMI (ami-03c7d01cf4dedc891) with security group allowing `SSH (22), Nexus Port (8081), 8082 and 8083` connections.
 
 - Connect to your instance with SSH:
 
@@ -661,7 +661,7 @@ docker image ls
 ### For the repo
 
 - Click 'Repositories'
-- Click 'Create Repository' and select 'docker (proxy)'
+- Click 'Create Repository' and select 'docker (hosted)'
 - Give it some name (docker-private)
 - Check 'HTTP' and give it a valid port (8083)
 - Check `Enable Docker V1 API`
