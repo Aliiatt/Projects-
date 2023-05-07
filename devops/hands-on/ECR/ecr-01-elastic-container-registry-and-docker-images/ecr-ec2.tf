@@ -1,7 +1,7 @@
 /*This terraform file creates a Compose enabled Docker machine on EC2 Instance. 
   Docker Machine is configured to work with AWS ECR using IAM role, and also
   upgraded to AWS CLI Version 2 to enable ECR commands.
-  Docker Machine will run on Amazon Linux 2 EC2 Instance with
+  Docker Machine will run on Amazon Linux 2023 Instance with
   custom security group allowing HTTP(80) and SSH (22) connections from anywhere. 
 */
 
@@ -12,10 +12,52 @@ provider "aws" {
   //  If you have entered your credentials in AWS CLI before, you do not need to use these arguments.
 }
 
-resource "aws_security_group" "ec2-sec-gr" {
-  name = "ec2-sec-gr"
+locals {
+  user = "clarusway"
+  instance-type = "t2.micro"
+  pem = "clarus"
+}
+
+data "aws_ami" "al2023" {
+  most_recent      = true
+  owners           = ["amazon"]
+
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name = "name"
+    values = ["al2023-ami-2023*"]
+  }
+}
+
+resource "aws_instance" "ecr-instance" {
+  ami                  = data.aws_ami.al2023.id
+  instance_type        = local.instance-type
+  key_name        = local.pem
+  vpc_security_group_ids = [aws_security_group.ec2-sec-gr.id]
   tags = {
-    Name = "ec2-sec-group"
+    Name = "ec2-ecr-instance-${local.user}"
+  }
+  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  user_data = <<-EOF
+          #! /bin/bash
+          dnf update -y
+          dnf install docker -y
+          systemctl start docker
+          systemctl enable docker
+          usermod -a -G docker ec2-user
+          curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
+          -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          EOF
+}
+
+resource "aws_security_group" "ec2-sec-gr" {
+  name = "ecr-lesson-sec-gr-${local.user}"
+  tags = {
+    Name = "ecr-lesson-sec-gr-${local.user}"
   }
   ingress {
     from_port   = 80
@@ -41,7 +83,7 @@ resource "aws_security_group" "ec2-sec-gr" {
 
 
 resource "aws_iam_role" "ec2ecrfullaccess" {
-  name = "ecr_ec2_permission"
+  name = "ecr_ec2_permission-${local.user}"
   managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"]
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -61,45 +103,14 @@ resource "aws_iam_role" "ec2ecrfullaccess" {
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "ecr-ec2_profile"
+  name = "ecr-ec2_profile-${local.user}"
   role = aws_iam_role.ec2ecrfullaccess.name
 }
-
-
-resource "aws_instance" "ecr-instance" {
-  ami                  = "ami-02e136e904f3da870"
-  instance_type        = "t2.micro"
-  key_name        = "davidskey" # you need to change this line
-  security_groups = ["ec2-sec-gr"]
-  tags = {
-    Name = "ec2-ecr-instance"
-  }
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
-  user_data = <<-EOF
-          #! /bin/bash
-          yum update -y
-          amazon-linux-extras install docker -y
-          systemctl start docker
-          systemctl enable docker
-          usermod -a -G docker ec2-user
-          curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
-          -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          ./aws/install
-          EOF
-
-}
-
-
-
-
 
 output "ec2-public-ip" {
   value = "http://${aws_instance.ecr-instance.public_ip}"
 }
 
 output "ssh-connection" {
-  value = "ssh -i ~/.ssh/davidskey.pem ec2-user@${aws_instance.ecr-instance.public_ip}"
+  value = "ssh -i ~/.ssh/${local.pem}.pem ec2-user@${aws_instance.ecr-instance.public_ip}"
 }
