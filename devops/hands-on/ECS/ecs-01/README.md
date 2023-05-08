@@ -58,7 +58,7 @@ ssh -i .ssh/xxxxx.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazonaws.com
 
 - Check your AWS CLI version `aws --version` command.(*AWS CLI is already installed on Amazon Linux 2 AMIs, but Amazon ECR functionality is available in the AWS CLI starting with version 1.9.15*).
 
-- Configure AWS credentials.
+- Configure AWS credentials or you can attach `AWS IAM Role` to your EC2 instance.
 
 ```bash
 aws configure
@@ -171,7 +171,7 @@ Name     : ecsTaskExecutionRole
 
 - Navigate to the Amazon ECS console and select Clusters from the left menu bar.
 
-- Select the `clarusshop-ecs` cluster, select the Services tab then select Deploy.
+- Select the `clarusshop-ecs` cluster, select the Services tab then select Create.
 
 - On the Deploy page, edit the following parameters (and keep the default values for parameters not listed below): 
 
@@ -197,7 +197,7 @@ Name     : ecsTaskExecutionRole
 
             - For Protocol, select `HTTP`.
 
-            - click Deploy.
+            - click Create.
 
 ### Check your Application is Running.
 
@@ -227,7 +227,7 @@ aws ecs create-cluster --cluster-name cluster-with-awscli
 	"networkMode": "awsvpc",
 	"containerDefinitions": [{
 		"name": "clarusshop-app",
-		"image": "046402772087.dkr.ecr.us-east-1.amazonaws.com/clarusshop:latest",
+		"image": "[account-ID].dkr.ecr.us-east-1.amazonaws.com/clarusshop:latest",
 		"portMappings": [{
 			"containerPort": 80,
 			"protocol": "tcp"
@@ -239,7 +239,7 @@ aws ecs create-cluster --cluster-name cluster-with-awscli
 	],
 	"cpu": "256",
 	"memory": "512",
-      "executionRoleArn": "arn:aws:iam::DON'T FORGET TO CHANGE ME:role/ecsTaskExecutionRole"
+      "executionRoleArn": "arn:aws:iam::[account-ID]:role/ecsTaskExecutionRole"
 }
 ```
 

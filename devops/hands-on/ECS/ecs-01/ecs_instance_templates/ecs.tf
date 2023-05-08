@@ -1,6 +1,6 @@
-//This Cloudformation Template creates a Docker machine on EC2 Instance.
-//Docker Machine will run on Amazon Linux 2 (ami-026dea5602e368e96) EC2 Instance with
-//custom security group allowing SSH connections from anywhere on port 22.
+//This Template creates a Docker machine on EC2 Instance.
+//Docker Machine will run on Amazon Linux 2023 (ami-0889a44b331db0194) EC2 Instance with
+//custom security group allowing SSH connections from anywhere on port 22 and HTTP.
 
 terraform {
   required_providers {
@@ -18,31 +18,11 @@ provider "aws" {
 
 locals {
   user = "cw-devops"
-  pem_file = "clarusway"
-}
-
-data "aws_ami" "amazon-linux-2" {
-  owners      = ["amazon"]
-  most_recent = true
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm*"]
-  }
+  pem_file = "clarusway"  # change here
 }
 
 resource "aws_instance" "ecs" {
-  ami = data.aws_ami.amazon-linux-2.id
+  ami = "ami-0889a44b331db0194"
   instance_type = "t2.micro"
   key_name = local.pem_file
   vpc_security_group_ids = [aws_security_group.ecs-sec-gr.id]
