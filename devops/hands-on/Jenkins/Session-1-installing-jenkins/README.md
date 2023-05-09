@@ -1,12 +1,12 @@
-# Hands-on Jenkins-01 : Installing Jenkins on Amazon Linux 2 EC2 Instance
+# Hands-on Jenkins-01 : Installing Jenkins on Amazon Linux 2023 EC2 Instance
 
-Purpose of the this hands-on training is to learn how to install Jenkins Server on Amazon Linux 2 EC2 instance and build simple jobs.
+Purpose of the this hands-on training is to learn how to install Jenkins Server on Amazon Linux 2023 EC2 instance and build simple jobs.
 
 ## Learning Outcomes
 
 At the end of the this hands-on training, students will be able to;
 
-- install and configure Jenkins Server on Amazon Linux 2 EC2 instance using `yum` repo.
+- install and configure Jenkins Server on Amazon Linux 2023 EC2 instance using `dnf` repo.
 
 - install plugins
 
@@ -21,7 +21,7 @@ At the end of the this hands-on training, students will be able to;
 
 ## Outline
 
-- Part 1 - Installing Jenkins Server on Amazon Linux 2 with `yum` Repo
+- Part 1 - Installing Jenkins Server on Amazon Linux 2023 with `dnf` Repo
 
 - Part 2 - Getting familiar with Jenkins Dashboard
 
@@ -35,9 +35,9 @@ At the end of the this hands-on training, students will be able to;
 
 - Part 7 - Creating a Jenkins Pipeline with Jenkinsfile
 
-## Part 1 - Installing Jenkins Server on Amazon Linux 2 with `yum` Repo
+## Part 1 - Installing Jenkins Server on Amazon Linux 2023 with `dnf` Repo
 
-- Launch an AWS EC2 instance of Amazon Linux 2 AMI with security group allowing SSH and TCP 8080 ports.
+- Launch an AWS EC2 instance of Amazon Linux 2023 AMI with security group allowing SSH and TCP 8080 ports.
 
 - Connect to the instance with SSH.
 
@@ -48,13 +48,13 @@ ssh -i .ssh/call-training.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazon
 - Update the installed packages and package cache on your instance.
 
 ```bash
-sudo yum update -y
+sudo dnf update -y
 ```
 
 - Install `Java 11 openjdk` Java Development Kit.
 
 ```bash
-sudo amazon-linux-extras install java-openjdk11 -y
+sudo dnf install java-11-amazon-corretto -y
 ```
 
 - Check the java version.
@@ -66,43 +66,43 @@ java -version
 - Install Git
 
 ```bash
-sudo yum install git -y
+sudo dnf install git -y
 ```
 
 - Add Jenkins repo to the `yum` repository.
 
 ```bash
-sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 ```
 
 - Import a key file from Jenkins-CI to enable installation from the package.
 
 ```bash
-sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 ```
 
-- Enable the EPEL repository for Amazon EC2 instance.
+- Upgrade the installed packages.
 
 ```bash
-sudo amazon-linux-extras install epel -y
+sudo dnf upgrade
 ```
 
 - Install Jenkins.
 
 ```bash
-sudo yum install jenkins -y
-```
-
-- Start Jenkins service.
-
-```bash
-sudo systemctl start jenkins
+sudo dnf install jenkins -y
 ```
 
 - Enable Jenkins service so that Jenkins service can restart automatically after reboots.
 
 ```bash
 sudo systemctl enable jenkins
+```
+
+- Start Jenkins service.
+
+```bash
+sudo systemctl start jenkins
 ```
 
 - Check if the Jenkins service is up and running.
