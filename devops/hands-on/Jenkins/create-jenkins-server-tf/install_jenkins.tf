@@ -1,5 +1,5 @@
 //This Terraform Template creates a jenkins server on AWS EC2 Instance
-//Jenkins server will run on Amazon Linux 2 with custom security group
+//Jenkins server will run on Amazon Linux 2023 with custom security group
 //allowing SSH (22) and TCP (8080) connections from anywhere.
 //User needs to select appropriate variables from "variable.tf" file when launching the instance.
 
@@ -16,8 +16,21 @@ provider "aws" {
   region = var.region
 }
 
+data "aws_ami" "al2023" {
+  most_recent      = true
+  owners           = ["amazon"]
+
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name = "name"
+    values = ["al2023-ami-2023*"]
+  }
+}
 resource "aws_instance" "tf-jenkins-server" {
-  ami           = var.myami
+  ami           = data.aws_ami.al2023.id
   instance_type = var.instancetype
   key_name      = var.mykey
   vpc_security_group_ids = [aws_security_group.tf-jenkins-sec-gr.id]
@@ -32,7 +45,7 @@ resource "null_resource" "forpasswd" {
   depends_on = [aws_instance.tf-jenkins-server]
 
   provisioner "local-exec" {
-    command = "sleep 3m"
+    command = "sleep 180"
   }
 
   # Do not forget to define your key file path correctly!
