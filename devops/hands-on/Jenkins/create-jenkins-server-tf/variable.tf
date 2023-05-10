@@ -5,7 +5,7 @@ variable "region" {
 }
 variable "mykey" {
   default = "clarus"
-  description = "write your kry pair"
+  description = "write your key pair"
 }
 variable "tags" {
   default = "jenkins-server"
