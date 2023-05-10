@@ -26,11 +26,11 @@ At the end of the this hands-on training, students will be able to;
 
 - Connect to the Jenkins Server 
   
-- Install Java
+- Install the JDK for Amazon Corretto 11
   
 ```bash
 sudo yum update -y
-sudo yum install java-11-amazon-corretto -y
+sudo yum install java-11-amazon-corretto-devel
 ```
 
 - Install Maven
