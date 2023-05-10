@@ -91,9 +91,9 @@ sudo yum install git -y
 
 - From `Source Code Management` part select `Git`
 
-- Enter `https://github.com/marcus-clarusway/java-tomcat-sample.git` for `Repository URL`.
+- Enter `https://github.com/clarusway-aws-devops/java-tomcat-sample-main.git` for `Repository URL`.
 
-- Go to the web browser and check the branch name of the git project `https://github.com/marcus-clarusway/java-tomcat-sample.git`. 
+- Go to the web browser and check the branch name of the git project `https://github.com/clarusway-aws-devops/java-tomcat-sample-main.git`. 
 
 - It is public repo, no need for `Credentials`.
 
