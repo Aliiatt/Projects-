@@ -251,4 +251,3 @@ git push
 - Go to the GitHub repo and modify some part in the `Jenkinsfile` and commit.
 
 - Observe the auto build action at Jenkins job.
-
