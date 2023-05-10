@@ -72,7 +72,7 @@ https://github.com/<your-github-account-name>/jenkins-first-webhook-project/
 
 - Go to `Build` section and choose "Execute Shell Command" step from `Add build step` dropdown menu.
 
-- Write down `python hello-world.py` to execute shell command, in textarea shown.
+- Write down `python3 hello-world.py` to execute shell command, in textarea shown.
 
 - Click `apply` and `save`.
 
@@ -208,8 +208,8 @@ pipeline {
         stage('run') {
             steps {
                 echo 'Clarusway_Way to Reinvent Yourself'
-                sh 'python --version'
-                sh 'python pipeline.py'
+                sh 'python3 --version'
+                sh 'python3 pipeline.py'
             }
         }
     }
