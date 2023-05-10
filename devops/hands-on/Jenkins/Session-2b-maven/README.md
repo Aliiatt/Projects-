@@ -39,7 +39,7 @@ sudo yum install java-11-amazon-corretto -y
 sudo su
 cd /opt
 rm -rf maven
-wget https://dlcdn.apache.org/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz
+wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
 tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
 rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
 sudo ln -s $(ls | grep apache-maven*) maven
