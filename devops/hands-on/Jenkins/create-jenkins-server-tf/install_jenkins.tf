@@ -35,6 +35,9 @@ resource "aws_instance" "tf-jenkins-server" {
   key_name      = var.mykey
   vpc_security_group_ids = [aws_security_group.tf-jenkins-sec-gr.id]
   user_data = file("install-jenkins.sh")
+  root_block_device {
+    volume_size = 16
+  }
   tags = {
     Name = var.tags
   }
