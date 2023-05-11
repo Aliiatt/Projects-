@@ -131,7 +131,7 @@ Command Agent Launcher
 
 - Select `Launch agent via execution of command on the controller` from dropdown menu in the "Launch method" field.
 
-- Enter `ssh -i /var/lib/jenkins/.ssh/<the_key_file> root@<agent_ip> java -jar /root/bin/agent.jar` in the "Launch command" field.
+- Enter `ssh -i /var/lib/jenkins/.ssh/<the_key_file> root@<agent_ip> java -jar -Djava.io.tmpdir=/mnt /root/bin/agent.jar` in the "Launch command" field.
 
 - Select `Keep this agent online as much as possible` from dropdown menu in the "Availability" field.
 
