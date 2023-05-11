@@ -41,7 +41,7 @@ sudo dnf install java-11-amazon-corretto -y
 sudo dnf install git -y
 ```
 
-- Instal  `Command Agent Launcher Plugin`.
+- Instal  `Command Agent Launcher Plugin` on Jenkins controller.
 
 - Follow `Manage Jenkins` -> `Manage Plugins` path and install the plugins (install without restart):
 
