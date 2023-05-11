@@ -42,7 +42,7 @@ rm -rf maven
 wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.1-bin.tar.gz
 tar -zxvf $(ls | grep apache-maven-*-bin.tar.gz)
 rm -rf $(ls | grep apache-maven-*-bin.tar.gz)
-sudo ln -s $(ls | grep apache-maven*) maven
+ln -s $(ls | grep apache-maven*) maven
 echo 'export M2_HOME=/opt/maven' > /etc/profile.d/maven.sh
 echo 'export PATH=${M2_HOME}/bin:${PATH}' >> /etc/profile.d/maven.sh
 exit
