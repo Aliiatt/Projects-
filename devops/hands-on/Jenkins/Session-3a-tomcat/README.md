@@ -33,6 +33,12 @@ ssh -i .ssh/mykey.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazonaws.com
 
 ## Part 2 - Install Java JDK
 
+- Update the installed packages and package cache on your instance.
+
+```bash
+sudo dnf update -y
+```
+
 - Install Java
 
 - For Centos & Fedora (Amazon ec-2 instance)
