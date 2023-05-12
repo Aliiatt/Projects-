@@ -1,4 +1,4 @@
-# Hands-on Jenkins-04 : Install & Configure Tomcat on Amazon Linux 2 AWS EC2 Instances
+# Hands-on Jenkins-04 : Install & Configure Tomcat on Amazon Linux 2023 AWS EC2 Instances
 
 Purpose of the this hands-on training is to install & configure Tomcat server for staging and prodcution environment.
 
@@ -38,7 +38,7 @@ ssh -i .ssh/mykey.pem ec2-user@ec2-3-133-106-98.us-east-2.compute.amazonaws.com
 - For Centos & Fedora (Amazon ec-2 instance)
 
 ```bash
-sudo yum install java-1.8.0-openjdk -y
+sudo dnf install java-11-amazon-corretto -y
 ```
 
 ## Part 3 - Install Tomcat
@@ -47,7 +47,7 @@ sudo yum install java-1.8.0-openjdk -y
 - For Centos & Fedora (Amazon ec-2 instance)
   
 ```bash
-sudo yum install unzip wget -y
+sudo dnf install unzip wget -y
 ```
 
 - Install Tomcat
@@ -71,14 +71,14 @@ tar.gz (pgp, sha512)
   
 ```bash
 cd /tmp
-wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.zip
+wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.zip
 ```
 
 - Unzip tomcat file and move to `/opt`
   
 ```bash
 unzip apache-tomcat-*.zip
-sudo mv apache-tomcat-9.0.70 /opt/tomcat
+sudo mv apache-tomcat-10.1.8 /opt/tomcat
 ```
 
 ## Part 4 - Configure tomcat
@@ -191,8 +191,8 @@ cd /opt/tomcat/conf
 - Restart the tomcat server
 
 ```bash
-/opt/tomcat/bin/shutdown.sh
-/opt/tomcat/bin/startup.sh
+sudo /opt/tomcat/bin/shutdown.sh
+sudo /opt/tomcat/bin/startup.sh
 ```
 
 ## Part 5 - Auto start of Tomcat server at boot
