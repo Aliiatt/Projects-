@@ -10,7 +10,6 @@ At the end of the this hands-on training, students will be able to;
 
 - automate a Maven project as Pipeline.
 
-
 ## Outline
 
 - Part 1 - Building Web Application
@@ -31,27 +30,36 @@ At the end of the this hands-on training, students will be able to;
 
 - Select `Free Style Project`
 
-- For Description : `This job packages the java-tomcat-sample-main app and creates a war file.`
+```yml
+- General:
+- Description : This job packages the java-tomcat-sample-main app and creates a war file.
 
-- At `General Tab`, select Discard old builds, `Strategy` is `Log Rotation`, and for `Days to keep builds` enter `5` and `Max # of builds to keep` enter `3`.
+- Discard old builds: 
+   Strategy:
+     Log Rotation:
+       Days to keep builds: 5 
+       Max#of builds to keep: 3
 
-- From `Source Code Management` part select `Git`
-
-- Enter `https://github.com/clarusway-aws-devops/java-tomcat-sample-main` for `Repository URL`.
+- Source Code Management:
+    Git:
+      Repository URL: https://github.com/clarusway-aws-devops/java-tomcat-sample-main
 
 - It is public repo, no need for `Credentials`.
 
-- At `Build Environments` section, select `Delete workspace before build starts` and `Add timestamps to the Console Output` options.
+- Build Environments: 
+   - Delete workspace before build starts
+   - Add timestamps to the Console Output
 
-- For `Build`, select `Invoke top-level Maven targets`
+- Build Steps:
+    Invoke top-level Maven targets:
+      - Maven Version: maven-3.9.2
+      - Goals: clean package
+  - POM: pom.xml
 
-  - For `Maven Version`, select the pre-defined maven, `maven-3.8.7` 
-  - For `Goals`, write `clean package`
-  - POM: `pom.xml`
-
-- At `Post-build Actions` section,
-  - Select `Archive the artifacts`
-  - For `Files to archive`, write `**/*.war` 
+- Post-build Actions:
+    Archive the artifacts:
+      Files to archive: **/*.war 
+```
 
 - Finally `Save` the job.
 
@@ -66,30 +74,37 @@ At the end of the this hands-on training, students will be able to;
 - Enter name as `Deploy-Application-Staging-Environment`
 
 - Select `Free Style Project`
+```yml
+- Description : This job deploys the java-tomcat-sample-main app to the staging environment.
 
-- For Description : `This job deploys the java-tomcat-sample-main app to the staging environment.`
+- Discard old builds: 
+   Strategy:
+     Log Rotation:
+       Days to keep builds: 5 
+       Max#of builds to keep: 3
 
-- At `General Tab`, select Discard old builds, `Strategy` is `Log Rotation`, and for `Days to keep builds` enter `5` and `Max # of builds to keep` enter `3`.
+- Build Environments: 
+   - Delete workspace before build starts
+   - Add timestamps to the Console Output
 
-- At `Build Environments` section, select `Delete workspace before build starts` and `Add timestamps to the Console Output` options.
-
-- For `Build`, select `Copy artifact from another project`
-
-  - Select `Project name` as `build-web-application`
-  - Select `Latest successful build` for `Which build`
+- Build Steps:
+    Copy artifact from another project:
+      - Project name: build-web-application
+      - Which build: Latest successful build
   - Check `Stable build only`
-  - For `Artifact to copy`, fill in `**/*.war`
+  - Artifact to copy: **/*.war
 
-- For `Add post-build action`, select `Deploy war/ear to a container`
-  - for `WAR/EAR files`, fill in `**/*.war`.
-  - for `Context path`, fill in `/`.
-  - for `Containers`, select `Tomcat 9.x Remote`.
-  - Add credentials
-    - Add -> Jenkins
-      - Add `username` and `password` as `tomcat/tomcat`.
-    - From `Credentials`, select `tomcat/*****`.
-  - for `Tomcat URL`, select `private ip` of staging tomcat server like `http://172.31.20.75:8080`.
-
+- Post-build Actions:
+    Deploy war/ear to a container:
+      WAR/EAR files: **/*.war
+      Context path: /
+      Containers: Tomcat 9.x Remote
+      Credentials:
+        Add: Jenkins
+          - username: tomcat
+          - password: tomcat
+      Tomcat URL: http://<tomcat staging server private ip>:8080
+```
 - Click on `Save`.
 
 - Go to the `Deploy-Application-Staging-Environment` 
@@ -104,15 +119,18 @@ At the end of the this hands-on training, students will be able to;
 
 -  Go to the `build-web-application`
    -  Select `Configure`
-   -  Select the `Post-build Actions` tab
-   -  From `Add post-build action`, `Build other projects`
-      -  For `Projects to build`, fill in `Deploy-Application-Staging-Environment`
-      -  And select `Trigger only if build is stable` option.
-   - Go to the `Build Triggers` tab
-     - Select `Poll SCM`
-       - In `Schedule`, fill in `* * * * *` (5 stars)
-         - You will see the warning `Do you really mean "every minute" when you say "* * * * *"? Perhaps you meant "H * * * *" to poll once per hour`
-  
+```yml
+- Post-build Actions:
+    Add post-build action:
+      Build other projects:
+        Projects to build: Deploy-Application-Staging-Environment
+        - Trigger only if build is stable
+
+- Build Triggers:
+    Poll SCM: 
+      Schedule: * * * * *
+  (You will see the warning `Do you really mean "every minute" when you say "* * * * *"? Perhaps you meant "H * * * *" to poll once per hour`)
+```
    - `Save` the modified job.
 
    - At `Project build-web-application`  page, you will see `Downstream Projects` : `Deploy-Application-Staging-Environment`
@@ -134,27 +152,35 @@ At the end of the this hands-on training, students will be able to;
 - Enter name as `Deploy-Application-Production-Environment`
 
 - Select `Free Style Project`
+```yml
+- Description : This job deploys the java-tomcat-sample-main app to the production environment.
 
-- For Description : `This job deploys the java-tomcat-sample-main app to the production environment.`
+- Discard old builds: 
+   Strategy:
+     Log Rotation:
+       Days to keep builds: 5 
+       Max#of builds to keep: 3
 
-- At `General Tab`, select `Strategy` and for `Days to keep builds` enter `5` and `Max # of builds to keep` enter `3`.
+- Build Environments: 
+   - Delete workspace before build starts
+   - Add timestamps to the Console Output
+   - Color ANSI Console Outputoptions
 
-- At `Build Environments` section, select `Delete workspace before build starts` and `Add timestamps to the Console Output` and `Color ANSI Console Outputoptions`.
-
-- For `Build`, select `Copy artifact from another project`
-
-  - Select `Project name` as `build-web-application`
-  - Select `Latest successful build` for `Which build`
+- Build Steps:
+    Copy artifact from another project:
+      - Project name: build-web-application
+      - Which build: Latest successful build
   - Check `Stable build only`
-  - For `Artifact to copy`, fill in `**/*.war`
+  - Artifact to copy: **/*.war
 
-- For `Add post-build action`, select `Deploy war/ear to a container`
-  - for `WAR/EAR files`, fill in `**/*.war`.
-  - for `Context path`, fill in `/`.
-  - for `Containers`, select `Tomcat 9.x Remote`.
-  - From `Credentials`, select `tomcat/*****`.
-  - for `Tomcat URL`, select `private ip` of production tomcat server like `http://172.31.28.5:8080`.
-
+- Post-build Actions:
+    Deploy war/ear to a container:
+      WAR/EAR files: **/*.war
+      Context path: /
+      Containers: Tomcat 9.x Remote
+      Credentials: tomcat/*****
+      Tomcat URL: http://<tomcat production server private ip>:8080
+```
 - Click on `Save`.
 
 - Click `Build Now`.
@@ -163,26 +189,34 @@ At the end of the this hands-on training, students will be able to;
 
 -  Go to the `build-web-application`
    -  Select `Configure`
-   -  Go to the `Post-build Actions` tab
-   -  Remove `Build othe projects` part from `Post-build Actions` section.
+
+```yml
+- Post-build Actions:
+  *** Remove ---> Build other projects
+```
 
 - Go to the Jenkins dashboard and click on `New Item` to create a pipeline.
 
 - Enter `build-web-application-code-pipeline` then select `Pipeline` and click `OK`.
+```yml
+- General:
+    Description: This pipeline job packages the java-tomcat-sample-main app and deploys to both staging and production environment` in the description field.
 
-- Enter `This pipeline job packages the java-tomcat-sample-main app and deploys to both staging and production environment` in the description field.
+    - Discard old builds: 
+       Strategy:
+         Log Rotation:
+           Days to keep builds: 5 
+           Max#of builds to keep: 3
 
-- At `General Tab`, select `Discard old build`,
-  -  select `Strategy` and 
-     -  for `Days to keep builds` enter `5` and 
-     -  `Max # of builds to keep` enter `3`.
+- Pipeline:
+    Definition: Pipeline script from SCM
+    SCM: Git
+      Repositories:
+        - Repository URL: https://github.com/clarusway-aws-devops/java-tomcat-sample-main
+        - Branches to build: 
+            Branch Specifier: */main
 
-- At `Advanced Project Options: Pipeline` section
+    Script Path: Jenkinsfile
+```
 
-  - for definition, select `Pipeline script from SCM`
-  - for SCM, select `Git`
-    - for `Repository URL`, select `https://github.com/clarusway-aws-devops/java-tomcat-sample-main`, show the `Jenkinsfile` here.
-    - for `Branch Specifier`, enter `*/main` as the GitHub branch is like that.
-    - approve that the `Script Path` is `Jenkinsfile`
-    
 - `Save` and `Build Now` and observe the behavior.
