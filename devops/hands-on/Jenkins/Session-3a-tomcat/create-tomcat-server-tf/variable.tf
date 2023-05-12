@@ -10,8 +10,8 @@ variable "tags" {
   default = ["stage", "production"]
 }
 variable "myami" {
-  description = "amazon linux 2 ami"
-  default = "ami-0022f774911c1d690"
+  description = "amazon linux 2023"
+  default = "ami-0889a44b331db0194"
 }
 variable "instancetype" {
   default = "t2.micro"
