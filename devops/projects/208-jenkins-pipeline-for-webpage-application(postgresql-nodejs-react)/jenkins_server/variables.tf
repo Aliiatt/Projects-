@@ -1,19 +1,17 @@
 variable "mykey" {
-  default = "tyler-team"
+  default = "clarus"
 }
-variable "myami" {
-  default = "ami-026b57f3c383c2eec"
-}
+
 variable "instancetype" {
   default = "t3a.medium"
 }
 variable "tag" {
-  default = "Jenkins_Server"
+  default = "Jenkins_Server_oliver"
 }
 variable "jenkins-sg" {
   default = "jenkins-server-sec-gr-208"
 }
 
 variable "user" {
-  default = "tyler"
+  default = "clarusway"
 }

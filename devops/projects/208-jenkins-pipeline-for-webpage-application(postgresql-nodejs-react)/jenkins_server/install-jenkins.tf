@@ -35,8 +35,22 @@ resource "aws_iam_instance_profile" "ec2-profile" {
   role = aws_iam_role.aws_access.name
 }
 
+data "aws_ami" "al2023" {
+  most_recent      = true
+  owners           = ["amazon"]
+
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+  filter {
+    name = "name"
+    values = ["al2023-ami-2023*"]
+  }
+}
+
 resource "aws_instance" "tf-jenkins-server" {
-  ami = var.myami
+  ami = data.aws_ami.al2023.id
   instance_type = var.instancetype
   key_name      = var.mykey
   vpc_security_group_ids = [aws_security_group.tf-jenkins-sec-gr.id]
@@ -45,7 +59,6 @@ resource "aws_instance" "tf-jenkins-server" {
     Name = var.tag
   }
   user_data = file("jenkins.sh")
-
 }
 
 resource "aws_security_group" "tf-jenkins-sec-gr" {
