@@ -1,4 +1,4 @@
-# Hands-on Prometheus & Grafana-01: Monitoring Kubernetes
+# Hands-on Prometheus & Grafana-02: Monitoring Kubernetes
 
 Purpose of the this hands-on training is to give students the knowledge of basic operations for monitoring Kubernetes cluster.
 
