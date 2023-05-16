@@ -141,7 +141,7 @@ resource "aws_instance" "jenkins-server" {
 
   provisioner "remote-exec" {
     inline = [
-      "sleep 150",
+      "sleep 180",
       "wget https://github.com/awsdevopsteam/jenkins-first-project/raw/master/to-do-app-nodejs.tar",
       "tar -xvf to-do-app-nodejs.tar",
       "rm to-do-app-nodejs.tar",
