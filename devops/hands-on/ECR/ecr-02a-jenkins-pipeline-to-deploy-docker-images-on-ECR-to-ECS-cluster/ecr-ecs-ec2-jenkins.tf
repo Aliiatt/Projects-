@@ -23,7 +23,7 @@ locals {
   github-token    = "xxxxxxxxx"                # you need to change this line
   key_pair        = "clarus"                   # you need to change this line
   pem_key_address = "~/.ssh/clarus.pem"        # you need to change this line
-  instance_type   = "t3a.small"
+  instance_type   = "t3a.medium"
   user            = "clarusway"
 }
 
@@ -141,7 +141,7 @@ resource "aws_instance" "jenkins-server" {
 
   provisioner "remote-exec" {
     inline = [
-      "sleep 3m",
+      "sleep 150",
       "wget https://github.com/awsdevopsteam/jenkins-first-project/raw/master/to-do-app-nodejs.tar",
       "tar -xvf to-do-app-nodejs.tar",
       "rm to-do-app-nodejs.tar",

@@ -8,7 +8,7 @@ At the end of the this hands-on training, students will be able to;
 
 - create and configure AWS ECR from the AWS Management Console.
 
-- configure Jenkins Server with Git, Docker, AWS CLI on Amazon Linux 2 EC2 instance using Terraform file.
+- configure Jenkins Server with Git, Docker, AWS CLI on Amazon Linux 2023 EC2 instance using Terraform file.
 
 - demonstrate how to build a docker image with Dockerfile.
 
