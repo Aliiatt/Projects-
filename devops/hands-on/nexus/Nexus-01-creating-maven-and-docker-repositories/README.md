@@ -700,3 +700,5 @@ docker push 54.173.219.86:8083/myng
 
 - Click `docker-private`. You’ll see the docker images.
 
+
+> Note: To use docker group repo, Nexus Pro version is required.
