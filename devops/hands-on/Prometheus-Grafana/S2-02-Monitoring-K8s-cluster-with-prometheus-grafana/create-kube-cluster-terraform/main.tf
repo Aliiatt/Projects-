@@ -15,32 +15,32 @@ data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
 
-variable "key-name" {
-  default = "oliver"   # change here
-}
-
 locals {
-  name = "oliver"   # change here, optional
+  # change here, optional
+  name = "clarusway"
+  keyname = "clarus"
+  instancetype = "t3a.medium"
+  ami = "ami-0557a15b87f6559cf"
 }
 
 resource "aws_instance" "master" {
-  ami                  = "ami-04505e74c0741db8d"
-  instance_type        = "t3a.medium"
-  key_name             = var.key-name
+  ami                  = local.ami
+  instance_type        = local.instancetype
+  key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
-  security_groups      = ["${local.name}-k8s-master-sec-gr"]
   user_data            = data.template_file.master.rendered
+  vpc_security_group_ids = [aws_security_group.tf-k8s-master-sec-gr.id]
   tags = {
     Name = "${local.name}-kube-master"
   }
 }
 
 resource "aws_instance" "worker" {
-  ami                  = "ami-04505e74c0741db8d"
-  instance_type        = "t3a.medium"
-  key_name             = var.key-name
+  ami                  = local.ami
+  instance_type        = local.instancetype
+  key_name             = local.keyname
   iam_instance_profile = aws_iam_instance_profile.ec2connectprofile.name
-  security_groups      = ["${local.name}-k8s-master-sec-gr"]
+  vpc_security_group_ids = [aws_security_group.tf-k8s-master-sec-gr.id]
   user_data            = data.template_file.worker.rendered
   tags = {
     Name = "${local.name}-kube-worker"
@@ -49,12 +49,12 @@ resource "aws_instance" "worker" {
 }
 
 resource "aws_iam_instance_profile" "ec2connectprofile" {
-  name = "ec2connectprofile"
+  name = "ec2connectprofile-${local.name}"
   role = aws_iam_role.ec2connectcli.name
 }
 
 resource "aws_iam_role" "ec2connectcli" {
-  name = "ec2connectcli"
+  name = "ec2connectcli-${local.name}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
