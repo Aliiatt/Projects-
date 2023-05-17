@@ -20,10 +20,10 @@ At the end of this hands-on training, students will be able to;
 
 ## Part 1 - Setting up the Kubernetes Cluster
 
-- Launch a Kubernetes Cluster of Ubuntu 20.04 with two nodes (one master, one worker) using the [Cloudformation Template to Create Kubernetes Cluster](../kubernetes-02-basic-operations/cfn-template-to-create-k8s-cluster.yml). *Note: Once the master node up and running, worker node automatically joins the cluster.*
+- Launch a Kubernetes Cluster of Ubuntu 22.04 with two nodes (one master, one worker) using the [Cloudformation Template to Create Kubernetes Cluster](./cfn-template-to-create-k8s-cluster.yml). *Note: Once the master node up and running, worker node automatically joins the cluster.*
 
 >*Note: If you have problem with kubernetes cluster, you can use this link for lesson.*
->https://www.katacoda.com/courses/kubernetes/playground
+>https://killercoda.com/playgrounds
 
 - Check if Kubernetes is running and nodes are ready.
 
