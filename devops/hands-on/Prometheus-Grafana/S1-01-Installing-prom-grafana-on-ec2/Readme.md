@@ -24,7 +24,7 @@ At the end of this hands-on training, students will be able to;
 
 - Launch an Amazon EC2 instance with setting seen below: 
 
-AMI: "Amazon Linux 2"  
+AMI: "Amazon Linux 2023"  
 Instance Type : "t2micro"  
 Region: "N.Virginia"  
 VPC: "Default VPC"  
@@ -33,14 +33,14 @@ Securtiy Group: "Port 22, 3000, 9090, 9100"
 - [Download the latest release](https://prometheus.io/download/) of Prometheus for linux. Select *.linux-*.tar.gz
 
 ```bash
-wget https://github.com/prometheus/prometheus/releases/download/v2.41.0/prometheus-2.41.0.linux-amd64.tar.gz
+wget https://github.com/prometheus/prometheus/releases/download/v2.44.0/prometheus-2.44.0.linux-amd64.tar.gz
 ```
 
 Extract and run it.
 
 ```bash
 tar xvfz prometheus-*.tar.gz
-cd prometheus-*
+cd prometheus-*-amd64/
 ```
 
 - Check the basic prometheus configuration.
@@ -131,7 +131,7 @@ For more about the expression language, see the [expression language documentati
 - Install and run the Prometheus Node Exporter that is a single static binary. Once you've downloaded it from the Prometheus downloads page extract it, and run it:
 
 ```bash
-wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
 tar xvfz node_exporter-*.*-amd64.tar.gz
 cd node_exporter-*.*-amd64
 ./node_exporter
@@ -209,8 +209,7 @@ scrape_configs:
 - Select `Red Hat, CentOS, RHEL, and Fedora(64 Bit)` part.
 
 ```bash
-wget https://dl.grafana.com/enterprise/release/grafana-enterprise-9.3.2-1.x86_64.rpm
-sudo yum install grafana-enterprise-9.3.2-1.x86_64.rpm
+sudo yum install -y https://dl.grafana.com/enterprise/release/grafana-enterprise-9.5.2-1.x86_64.rpm
 sudo systemctl start grafana-server.service
 ```
 
@@ -238,7 +237,7 @@ sudo systemctl start grafana-server.service
 
 - Click the graph title, then click "Edit".
 
-- Under the "Metrics" tab, select your Prometheus data source (bottom right).
+- Under the "Data source" tab, select Prometheus data source.
 
 - Enter any Prometheus expression into the "Query" field, while using the "Metric" field to lookup metrics via autocompletion.
 
