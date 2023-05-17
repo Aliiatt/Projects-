@@ -15,7 +15,7 @@ systemctl enable docker
 usermod -a -G docker ec2-user
 usermod -a -G docker jenkins
 cp /lib/systemd/system/docker.service /lib/systemd/system/docker.service.bak
-sed -i 's/^ExecStart=*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/127.0.0.1:2375 -H unix:\/\/\/var\/run\/docker.sock/g' /lib/systemd/system/docker.service
+sed -i 's/^ExecStart=.*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/127.0.0.1:2376 -H unix:\/\/\/var\/run\/docker.sock/g' /lib/systemd/system/docker.service
 systemctl daemon-reload
 systemctl restart jenkins
 curl -SL https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
