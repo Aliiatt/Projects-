@@ -55,7 +55,7 @@ kubectl get sa -A
 
 ```bash
 kubectl run myng --image=nginx
-kubectl get pods/mypod -o yaml
+kubectl get pods/myng -o yaml
 ```
 
 - In the output, you see a field `spec.serviceAccountName`. Kubernetes automatically sets that value if you don't specify it when you create a Pod.
