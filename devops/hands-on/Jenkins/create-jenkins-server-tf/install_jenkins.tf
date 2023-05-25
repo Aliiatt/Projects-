@@ -24,6 +24,11 @@ data "aws_ami" "al2023" {
     name = "virtualization-type"
     values = ["hvm"]
   }
+
+  filter {
+    name = "architecture"
+    values = ["x86_64"]
+  }
   filter {
     name = "name"
     values = ["al2023-ami-2023*"]
