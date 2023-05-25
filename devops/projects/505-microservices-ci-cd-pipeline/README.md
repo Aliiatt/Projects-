@@ -62,21 +62,20 @@ This project aims to create full CI/CD Pipeline for microservice based applicati
 ## MSP 1 - Prepare Development Server Manually on EC2 Instance
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-* Prepare development server manually on Amazon Linux 2 (t3a.medium) for developers, enabled with `Docker`,  `Docker-Compose`,  `Java 11`,  `Git`.
+* Prepare development server manually on Amazon Linux 2023 (t3a.medium) for developers, enabled with `Docker`,  `Docker-Compose`,  `Java 11`,  `Git`.
 
 ``` bash
 #! /bin/bash
-sudo yum update -y
+sudo dnf update -y
 sudo hostnamectl set-hostname petclinic-dev-server
-sudo amazon-linux-extras install docker -y
+sudo dnf install docker -y
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -a -G docker ec2-user
-sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
--o /usr/local/bin/docker-compose
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-sudo yum install git -y
-sudo yum install java-11-amazon-corretto -y
+sudo dnf install git -y
+sudo dnf install java-11-amazon-corretto -y
 newgrp docker
 ```
 
@@ -93,7 +92,7 @@ git clone https://github.com/clarusway/petclinic-microservices-with-db.git
 * Change your working directory to **petclinic-microservices** and delete the **.git** directory.
 
 ```bash
-cd petclinic-microservices
+cd petclinic-microservices-with-db
 rm -rf .git
 ```
 
@@ -104,9 +103,11 @@ rm -rf .git
 ```bash
 git init
 git add .
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git]
+git remote add origin https://[github username]:[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git]
 git push origin main
 ```
 * Prepare base branches namely `main`,  `dev`,  `release` for DevOps cycle.
@@ -596,51 +597,43 @@ git checkout feature/msp-9
 ``` bash
 #! /bin/bash
 # update os
-yum update -y
+dnf update -y
 # set server hostname as jenkins-server
 hostnamectl set-hostname jenkins-server
 # install git
-yum install git -y
+dnf install git -y
 # install java 11
-yum install java-11-amazon-corretto -y
+dnf install java-11-amazon-corretto -y
 # install jenkins
-wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
-rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
-yum install jenkins -y
-systemctl start jenkins
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+dnf upgrade
+dnf install jenkins -y
 systemctl enable jenkins
+systemctl start jenkins
 # install docker
-amazon-linux-extras install docker -y
+dnf install docker -y
 systemctl start docker
 systemctl enable docker
 usermod -a -G docker ec2-user
 usermod -a -G docker jenkins
 # configure docker as cloud agent for jenkins
 cp /lib/systemd/system/docker.service /lib/systemd/system/docker.service.bak
-sed -i 's/^ExecStart=.*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/127.0.0.1:2375 -H unix:\/\/\/var\/run\/docker.sock/g' /lib/systemd/system/docker.service
+sed -i 's/^ExecStart=.*/ExecStart=\/usr\/bin\/dockerd -H tcp:\/\/127.0.0.1:2376 -H unix:\/\/\/var\/run\/docker.sock/g' /lib/systemd/system/docker.service
 systemctl daemon-reload
-systemctl restart docker
 systemctl restart jenkins
 # install docker compose
-curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" \
--o /usr/local/bin/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
-# uninstall aws cli version 1
-rm -rf /bin/aws
-# install aws cli version 2
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-./aws/install
 # install python 3
-yum install python3 -y
+dnf install -y python3-pip python3-devel
 # install ansible
 pip3 install ansible
 # install boto3
-pip3 install boto3
+pip3 install boto3 botocore
 # install terraform
-yum install -y yum-utils
-yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-yum -y install terraform
+wget https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip
+unzip terraform_1.4.6_linux_amd64.zip -d /usr/local/bin
 ```
 
 * Grant permissions to Jenkins Server within Cloudformation template to create Cloudformation Stack and create ECR Registry, push or pull Docker images to ECR Repo.
