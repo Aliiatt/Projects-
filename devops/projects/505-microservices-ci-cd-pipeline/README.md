@@ -110,7 +110,7 @@ git branch -M main
 git remote add origin https://[github username]:[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git]
 git push origin main
 ```
-* Prepare base branches namely `main`,  `dev`,  `release` for DevOps cycle.
+* Prepare base branches namely `dev` and `release` for DevOps cycle.
 
   + Create `dev` base branch.
 
