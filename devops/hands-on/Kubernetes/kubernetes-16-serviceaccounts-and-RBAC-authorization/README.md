@@ -291,6 +291,8 @@ kubectl exec -it kubepod -- sh
 / # exit
 ```
 
+> Note: In case you need a token for your service account, you can use `kubectl create token <serviceaccount>` command.
+
 Resources:
 - https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 - https://kubernetes.io/docs/reference/access-authn-authz/rbac/
