@@ -521,8 +521,6 @@ services:
     image: openzipkin/zipkin
     container_name: tracing-server
     mem_limit: 512M
-    environment:
-    - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
     ports:
      - 9411:9411 
   
@@ -635,8 +633,6 @@ pip3 install boto3 botocore
 wget https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_linux_amd64.zip
 unzip terraform_1.4.6_linux_amd64.zip -d /usr/local/bin
 ```
-
-* Grant permissions to Jenkins Server within Cloudformation template to create Cloudformation Stack and create ECR Registry, push or pull Docker images to ECR Repo.
 
 * Commit the change, then push the terraform files file to the remote repo.
 
