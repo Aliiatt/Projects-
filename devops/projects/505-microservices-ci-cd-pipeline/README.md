@@ -2229,7 +2229,7 @@ driver.close()
 - hosts: all
   tasks:
   - name: run dummy selenium job
-    shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} callahanclarus/selenium-py-chrome:latest python {{ item }}"
+    shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} clarusway/selenium-py-chrome:latest python {{ item }}"
     with_fileglob: "{{ workspace }}/selenium-jobs/dummy*.py"
     register: output
   
@@ -2285,7 +2285,7 @@ ansible-playbook --connection=local --inventory 127.0.0.1, --extra-vars "workspa
 - hosts: all
   tasks:
   - name: run all selenium jobs
-    shell: "docker run --rm --env MASTER_PUBLIC_IP={{ master_public_ip }} -v {{ workspace }}:{{ workspace }} -w {{ workspace }} callahanclarus/selenium-py-chrome:latest python {{ item }}"
+    shell: "docker run --rm --env MASTER_PUBLIC_IP={{ master_public_ip }} -v {{ workspace }}:{{ workspace }} -w {{ workspace }} clarusway/selenium-py-chrome:latest python {{ item }}"
     register: output
     with_fileglob: "{{ workspace }}/selenium-jobs/test*.py"
   
