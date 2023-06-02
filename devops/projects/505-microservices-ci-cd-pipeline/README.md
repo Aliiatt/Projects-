@@ -861,7 +861,7 @@ git push origin dev
 ## MSP 13 - Prepare and Implement Selenium Tests
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-* Create `feature/msp-10` branch from `dev`.
+* Create `feature/msp-13` branch from `dev`.
 
 ``` bash
 git checkout dev
