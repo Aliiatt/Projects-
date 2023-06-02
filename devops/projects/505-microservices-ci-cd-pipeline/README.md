@@ -1104,437 +1104,13 @@ git branch feature/msp-15
 git checkout feature/msp-15
 ```
 
-- Create a folder for roles of master and worker nodes with the name of `IAM` under the `infrastructure/dev-k8s-terraform/modules` folder.
-
-```bash
-mkdir -p infrastructure/dev-k8s-terraform/modules/IAM
-```
-
-- Create iam policy file for the master node with the name of `policy_for_master.json`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-      {
-        "Effect": "Allow",
-        "Action": [
-        "autoscaling:DescribeAutoScalingGroups",
-        "autoscaling:DescribeLaunchConfigurations",
-        "autoscaling:DescribeTags",
-        "ec2:DescribeInstances",
-        "ec2:DescribeRegions",
-        "ec2:DescribeRouteTables",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeVolumes",
-        "ec2:CreateSecurityGroup",
-        "ec2:CreateTags",
-        "ec2:CreateVolume",
-        "ec2:ModifyInstanceAttribute",
-        "ec2:ModifyVolume",
-        "ec2:AttachVolume",
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:CreateRoute",
-        "ec2:DeleteRoute",
-        "ec2:DeleteSecurityGroup",
-        "ec2:DeleteVolume",
-        "ec2:DetachVolume",
-        "ec2:RevokeSecurityGroupIngress",
-        "ec2:DescribeVpcs",
-        "elasticloadbalancing:AddTags",
-        "elasticloadbalancing:AttachLoadBalancerToSubnets",
-        "elasticloadbalancing:ApplySecurityGroupsToLoadBalancer",
-        "elasticloadbalancing:CreateLoadBalancer",
-        "elasticloadbalancing:CreateLoadBalancerPolicy",
-        "elasticloadbalancing:CreateLoadBalancerListeners",
-        "elasticloadbalancing:ConfigureHealthCheck",
-        "elasticloadbalancing:DeleteLoadBalancer",
-        "elasticloadbalancing:DeleteLoadBalancerListeners",
-        "elasticloadbalancing:DescribeLoadBalancers",
-        "elasticloadbalancing:DescribeLoadBalancerAttributes",
-        "elasticloadbalancing:DetachLoadBalancerFromSubnets",
-        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-        "elasticloadbalancing:ModifyLoadBalancerAttributes",
-        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-        "elasticloadbalancing:SetLoadBalancerPoliciesForBackendServer",
-        "elasticloadbalancing:AddTags",
-        "elasticloadbalancing:CreateListener",
-        "elasticloadbalancing:CreateTargetGroup",
-        "elasticloadbalancing:DeleteListener",
-        "elasticloadbalancing:DeleteTargetGroup",
-        "elasticloadbalancing:DescribeListeners",
-        "elasticloadbalancing:DescribeLoadBalancerPolicies",
-        "elasticloadbalancing:DescribeTargetGroups",
-        "elasticloadbalancing:DescribeTargetHealth",
-        "elasticloadbalancing:ModifyListener",
-        "elasticloadbalancing:ModifyTargetGroup",
-        "elasticloadbalancing:RegisterTargets",
-        "elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
-        "iam:CreateServiceLinkedRole",
-        "kms:DescribeKey",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:PutImage",
-        "ecr:InitiateLayerUpload",
-        "ecr:UploadLayerPart",
-        "ecr:CompleteLayerUpload",
-        "ecr:DescribeRepositories",
-        "ecr:GetRepositoryPolicy",
-        "ecr:ListImages",
-        "ecr:DeleteRepository",
-        "ecr:BatchDeleteImage",
-        "ecr:SetRepositoryPolicy",
-        "ecr:DeleteRepositoryPolicy",
-        "s3:ListAccessPointsForObjectLambda",
-        "s3:GetObjectVersionTagging",
-        "s3:GetStorageLensConfigurationTagging",
-        "s3:GetObjectAcl",
-        "s3:GetBucketObjectLockConfiguration",
-        "s3:GetIntelligentTieringConfiguration",
-        "s3:GetObjectVersionAcl",
-        "s3:GetBucketPolicyStatus",
-        "s3:GetObjectRetention",
-        "s3:GetBucketWebsite",
-        "s3:GetJobTagging",
-        "s3:ListJobs",
-        "s3:GetMultiRegionAccessPoint",
-        "s3:GetObjectAttributes",
-        "s3:GetObjectLegalHold",
-        "s3:GetBucketNotification",
-        "s3:DescribeMultiRegionAccessPointOperation",
-        "s3:GetReplicationConfiguration",
-        "s3:ListMultipartUploadParts",
-        "s3:GetObject",
-        "s3:DescribeJob",
-        "s3:GetAnalyticsConfiguration",
-        "s3:GetObjectVersionForReplication",
-        "s3:GetAccessPointForObjectLambda",
-        "s3:GetStorageLensDashboard",
-        "s3:GetLifecycleConfiguration",
-        "s3:GetAccessPoint",
-        "s3:GetInventoryConfiguration",
-        "s3:GetBucketTagging",
-        "s3:GetAccessPointPolicyForObjectLambda",
-        "s3:GetBucketLogging",
-        "s3:ListBucketVersions",
-        "s3:ListBucket",
-        "s3:GetAccelerateConfiguration",
-        "s3:GetObjectVersionAttributes",
-        "s3:GetBucketPolicy",
-        "s3:GetEncryptionConfiguration",
-        "s3:GetObjectVersionTorrent",
-        "s3:GetBucketRequestPayment",
-        "s3:GetAccessPointPolicyStatus",
-        "s3:GetObjectTagging",
-        "s3:GetMetricsConfiguration",
-        "s3:GetBucketOwnershipControls",
-        "s3:GetBucketPublicAccessBlock",
-        "s3:GetMultiRegionAccessPointPolicyStatus",
-        "s3:ListBucketMultipartUploads",
-        "s3:GetMultiRegionAccessPointPolicy",
-        "s3:GetAccessPointPolicyStatusForObjectLambda",
-        "s3:ListAccessPoints",
-        "s3:GetBucketVersioning",
-        "s3:ListMultiRegionAccessPoints",
-        "s3:GetBucketAcl",
-        "s3:GetAccessPointConfigurationForObjectLambda",
-        "s3:ListStorageLensConfigurations",
-        "s3:GetObjectTorrent",
-        "s3:GetStorageLensConfiguration",
-        "s3:GetAccountPublicAccessBlock",
-        "s3:ListAllMyBuckets",
-        "s3:GetBucketCORS",
-        "s3:GetBucketLocation",
-        "s3:GetAccessPointPolicy",
-        "s3:GetObjectVersion"
-        ],
-        "Resource": [
-          "*"
-        ]
-      }
-    ]
-}
-```
-
-- Create iam policy file for the worker node with the name of `policy_for_worker.json`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateSnapshot",
-        "ec2:AttachVolume",
-        "ec2:DetachVolume",
-        "ec2:ModifyVolume",
-        "ec2:DescribeAvailabilityZones",
-        "ec2:DescribeInstances",
-        "ec2:DescribeSnapshots",
-        "ec2:DescribeTags",
-        "ec2:DescribeVolumes",
-        "ec2:DescribeVolumesModifications",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:PutImage",
-        "ecr:InitiateLayerUpload",
-        "ecr:UploadLayerPart",
-        "ecr:CompleteLayerUpload",
-        "ecr:DescribeRepositories",
-        "ecr:GetRepositoryPolicy",
-        "ecr:ListImages",
-        "ecr:DeleteRepository",
-        "ecr:BatchDeleteImage",
-        "ecr:SetRepositoryPolicy",
-        "ecr:DeleteRepositoryPolicy"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateTags"
-      ],
-      "Resource": [
-        "arn:aws:ec2:*:*:volume/*",
-        "arn:aws:ec2:*:*:snapshot/*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "ec2:CreateAction": [
-            "CreateVolume",
-            "CreateSnapshot"
-          ]
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteTags"
-      ],
-      "Resource": [
-        "arn:aws:ec2:*:*:volume/*",
-        "arn:aws:ec2:*:*:snapshot/*"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "aws:RequestTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "aws:RequestTag/CSIVolumeName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/CSIVolumeName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteVolume"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteSnapshot"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/CSIVolumeSnapshotName": "*"
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DeleteSnapshot"
-      ],
-      "Resource": "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
-        }
-      }
-    }
-  ]
-}
-```
-
-- Create a terraform file for roles with the name of `variables.tf`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
-
-```go
-variable "master-role-policy" {
-  default = "petclinic_policy_for_master_role"
-}
-
-variable "worker-role-policy" {
-  default = "petclinic_policy_for_worker_role"
-}
-
-variable "master-role" {
-  default = "petclinic_role_master_k8s"
-}
-
-variable "worker-role" {
-  default = "petclinic_role_worker_k8s"
-}
-
-variable "master-role-attachment" {
-  default = "petclinic_attachment_for_master"
-}
-
-variable "worker-role-attachment" {
-  default = "petclinic_attachment_for_worker"
-}
-
-variable "profile_for_master" {
-  default = "petclinic_profile_for_master"
-}
-
-variable "profile_for_worker" {
-  default = "petclinic_profile_for_worker"
-}
-```
-
-- Create a terraform file for roles with the name of `roles.tf`  under the `infrastructure/dev-k8s-terraform/modules/IAM`.
-
-```go
-resource "aws_iam_policy" "policy_for_master_role" {
-  name        = var.master-role-policy
-  policy      = file("./modules/IAM/policy_for_master.json")
-}
-
-resource "aws_iam_policy" "policy_for_worker_role" {
-  name        = var.worker-role-policy
-  policy      = file("./modules/IAM/policy_for_worker.json")
-}
-
-resource "aws_iam_role" "role_for_master" {
-  name = var.master-role
-
-  # Terraform "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
-
-  tags = {
-    Name = "role_for_master"
-  }
-}
-
-resource "aws_iam_role" "role_for_worker" {
-  name = var.worker-role
-
-  # Terraform "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
-
-  tags = {
-    Name = "role_for_worker"
-  }
-}
-
-resource "aws_iam_policy_attachment" "attach_for_master" {
-  name       = var.master-role-attachment
-  roles      = [aws_iam_role.role_for_master.name]
-  policy_arn = aws_iam_policy.policy_for_master_role.arn
-}
-
-resource "aws_iam_policy_attachment" "attach_for_worker" {
-  name       = var.worker-role-attachment
-  roles      = [aws_iam_role.role_for_worker.name]
-  policy_arn = aws_iam_policy.policy_for_worker_role.arn
-}
-
-resource "aws_iam_instance_profile" "profile_for_master" {
-  name  = var.profile_for_master
-  role = aws_iam_role.role_for_master.name
-}
-
-resource "aws_iam_instance_profile" "profile_for_worker" {
-  name  = var.profile_for_worker
-  role = aws_iam_role.role_for_worker.name
-}
-
-output master_profile_name {
-  value       = aws_iam_instance_profile.profile_for_master.name
-}
-
-output worker_profile_name {
-  value       = aws_iam_instance_profile.profile_for_worker.name
-}
-```
+- Create a folder for kubernetes infrastructure with the name of `dev-k8s-terraform` under the `infrastructure` folder.
 
 - Prepare a terraform file for kubernetes Infrastructure consisting of 1 master, 2 Worker Nodes and save it as `main.tf` under the `infrastructure/dev-k8s-terraform`.
 
 ```go
 provider "aws" {
   region  = "us-east-1"
-}
-
-module "iam" {
-  source = "./modules/IAM"
 }
 
 variable "sec-gr-mutual" {
@@ -1685,14 +1261,12 @@ resource "aws_security_group" "petclinic-kube-master-sg" {
 resource "aws_instance" "kube-master" {
     ami = "ami-053b0d53c279acc90"
     instance_type = "t3a.medium"
-    iam_instance_profile = module.iam.master_profile_name
     vpc_security_group_ids = [aws_security_group.petclinic-kube-master-sg.id, aws_security_group.petclinic-mutual-sg.id]
     key_name = "clarus"
     subnet_id = "subnet-c41ba589"  # select own subnet_id of us-east-1a
     availability_zone = "us-east-1a"
     tags = {
         Name = "kube-master"
-        "kubernetes.io/cluster/petclinicCluster" = "owned"
         Project = "tera-kube-ans"
         Role = "master"
         Id = "1"
@@ -1703,14 +1277,12 @@ resource "aws_instance" "kube-master" {
 resource "aws_instance" "worker-1" {
     ami = "ami-053b0d53c279acc90"
     instance_type = "t3a.medium"
-        iam_instance_profile = module.iam.worker_profile_name
     vpc_security_group_ids = [aws_security_group.petclinic-kube-worker-sg.id, aws_security_group.petclinic-mutual-sg.id]
     key_name = "clarus"
     subnet_id = "subnet-c41ba589"  # select own subnet_id of us-east-1a
     availability_zone = "us-east-1a"
     tags = {
         Name = "worker-1"
-        "kubernetes.io/cluster/petclinicCluster" = "owned"
         Project = "tera-kube-ans"
         Role = "worker"
         Id = "1"
@@ -1721,14 +1293,12 @@ resource "aws_instance" "worker-1" {
 resource "aws_instance" "worker-2" {
     ami = "ami-053b0d53c279acc90"
     instance_type = "t3a.medium"
-    iam_instance_profile = module.iam.worker_profile_name
     vpc_security_group_ids = [aws_security_group.petclinic-kube-worker-sg.id, aws_security_group.petclinic-mutual-sg.id]
     key_name = "clarus"
     subnet_id = "subnet-c41ba589"  # select own subnet_id of us-east-1a
     availability_zone = "us-east-1a"
     tags = {
         Name = "worker-2"
-        "kubernetes.io/cluster/petclinicCluster" = "owned"
         Project = "tera-kube-ans"
         Role = "worker"
         Id = "2"
@@ -1847,7 +1417,7 @@ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/
 
   * Click `Build Now`
 
-- Create a folder for ansible jobs under the petclinic-microservices-with-db folder.
+- Create a folder for ansible jobs under the `petclinic-microservices-with-db` folder.
 
 ```bash
 mkdir -p ansible/inventory
@@ -1938,38 +1508,6 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
 
   * Click `Build Now`
 
-- Create a `ClusterConfiguration file` and save it as `clusterconfig-base.yml` under `ansible/playbooks` folder.
-
-```yml
-apiVersion: kubeadm.k8s.io/v1beta3
-kind: ClusterConfiguration
-kubernetesVersion: v1.26.3
-controlPlaneEndpoint: ${CONTROLPLANE_ENDPOINT}
-networking:
-  podSubnet: 10.244.0.0/16
-apiServer:
-  extraArgs:
-    cloud-provider: external
-controllerManager:
-  extraArgs:
-    cloud-provider: external
----
-apiVersion: kubeadm.k8s.io/v1beta3
-kind: InitConfiguration
-nodeRegistration:
-  kubeletExtraArgs:
-    cloud-provider: external
----
-kind: KubeletConfiguration
-apiVersion: kubelet.config.k8s.io/v1beta1
-cgroupDriver: systemd
-```
-
-- The fields in the `clusterconfig-base.yml` file:
-    - ```controlPlaneEndpoint:``` Private IP address of the master node. (It will be paste programmatically.)
-    - ```podSubnet:``` Pod CIDR is necessary for Flannel CNI Plug-in.
-    - ```cloud-provider:``` With the value ```external``` Kubernetes cluster will be aware of the cloud controller manager. So that the cloud controller manager can implement specific tasks related to nodes, services etc.
-
 - Create an ansible playbook to install kubernetes and save it as `k8s_setup.yaml` under `ansible/playbooks` folder.
 
 ```yaml
@@ -2046,27 +1584,10 @@ cgroupDriver: systemd
     become: yes
     shell: kubeadm config images pull
 
-  - name: copy the configuration
-    become: yes
-    copy: 
-      src: ./clusterconfig-base.yml
-      dest: /home/ubuntu/
-  
-  - name: get gettext-base
-    become: true
-    apt:
-      package: gettext-base
-      state: present
-
-  - name: change controlplane_endpoint and produce the clusterconfig.yml file
-    shell: |
-      export CONTROLPLANE_ENDPOINT={{ hostvars[inventory_hostname]['private_ip_address'] }}
-      envsubst < /home/ubuntu/clusterconfig-base.yml > /home/ubuntu/clusterconfig.yml
-
   - name: initialize the Kubernetes cluster using kubeadm
     become: true
     shell: |
-      kubeadm init --config /home/ubuntu/clusterconfig.yml
+      kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=All
     
   - name: Setup kubeconfig for ubuntu user
     become: true
@@ -2099,31 +1620,6 @@ cgroupDriver: systemd
   - name: Join workers to cluster
     shell: "{{ hostvars['kube_master']['worker_join'] }}"
     register: result_of_joining
-
-- hosts: role_master
-  become: false
-  tasks:
-
-  - name: Patch the instances
-    become: false
-    shell: |
-      cd /home/ubuntu
-      kubectl patch node {{ hostvars[groups['role_master'][0]]['private_dns_name'] }} -p '{"spec":{"providerID":"aws:///us-east-1a/{{ hostvars[groups['role_master'][0]]['instance_id'] }}" }}'
-      kubectl patch node {{ hostvars[groups['role_worker'][0]]['private_dns_name'] }} -p '{"spec":{"providerID":"aws:///us-east-1a/{{ hostvars[groups['role_worker'][0]]['instance_id'] }}" }}'
-      kubectl patch node {{ hostvars[groups['role_worker'][1]]['private_dns_name'] }} -p '{"spec":{"providerID":"aws:///us-east-1a/{{ hostvars[groups['role_worker'][1]]['instance_id'] }}" }}'
-
-  - name: Deploy the required cloud-controller-manager 
-    shell: |
-      cd /home/ubuntu
-      curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-      chmod 777 get_helm.sh
-      ./get_helm.sh
-      helm repo add aws-cloud-controller-manager https://kubernetes.github.io/cloud-provider-aws
-      helm repo update
-      helm upgrade --install aws-cloud-controller-manager aws-cloud-controller-manager/aws-cloud-controller-manager --set image.tag=v1.26.0
-      
-  - name: Deploy Nginx Ingress 
-    shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
 - Commit the change, then push the ansible playbooks to the remote repo.
@@ -2279,8 +1775,6 @@ services:
       kompose.service.nodeport.port: "30001"
   tracing-server:
     image: openzipkin/zipkin
-    environment:
-    - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
     ports:
      - 9411:9411
   admin-server:
@@ -2417,6 +1911,7 @@ sudo su -s /bin/bash jenkins
 export PATH=$PATH:/usr/local/bin
 helm version
 helm plugin install https://github.com/hypnoglow/helm-s3.git
+exit
 ``` 
 
 * ``Initialize`` the Amazon S3 Helm repository.
