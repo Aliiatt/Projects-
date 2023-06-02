@@ -649,6 +649,14 @@ git push origin dev
 ## MSP 10 - Configure Jenkins Server for Project
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+* Launch the jenkins server using `msp-9-jenkins-server-tf-template` folder.
+
+* After launch we will go on jenkins server. So, clone the project repo to the jenkins server.
+
+```bash
+git clone https://[github username]:[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git
+```
+
 * Get the initial administrative password.
 
 ``` bash
