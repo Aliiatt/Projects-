@@ -3127,10 +3127,19 @@ Scheme              : internet-facing
 IP address type     : ipv4
 
 <!-- Listeners-->
-Protocol            : HTTPS/HTTP
-Port                : 443/80
+Protocol            : HTTP
+Port                : 80
 Availability Zones  : Select AZs of RKE instances
-Target group        : `call-rancher-http-80-tg` target group 
+Target group        : `petclinic-rancher-http-80-tg` target group
+
+<!-- Add Listener-->
+Protocol            : HTTPS
+Port                : 443
+Availability Zones  : Select AZs of RKE instances
+Target group        : `petclinic-rancher-http-80-tg` target group
+
+<!-- Secure listener settings -->
+From ACM            : *.clarusway.us   # change with your dns name
 ```
 
 * Configure ALB Listener of HTTP on `Port 80` to redirect traffic to HTTPS on `Port 443`.
