@@ -1579,8 +1579,12 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
       mkdir /etc/containerd
       containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
       sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
-      systemctl restart containerd
-      systemctl enable containerd
+
+  - name: Restart containerd and enable
+    service:
+      name: containerd
+      state: restarted
+      enabled: yes
 
 
 - hosts: role_master
@@ -1633,6 +1637,8 @@ ansible -i ./ansible/inventory/dev_stack_dynamic_inventory_aws_ec2.yaml all -m p
   - name: Join workers to cluster
     shell: "{{ hostvars['kube_master']['worker_join'] }}"
     register: result_of_joining
+
+  - debug: msg='{{ result_of_joining.stdout }}'
 ```
 
 - Commit the change, then push the ansible playbooks to the remote repo.
