@@ -3259,9 +3259,9 @@ kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(kubectl --kubeconfig $K
 ## MSP 25 - Create Staging and Production Environment with Rancher
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-* To provide access of Rancher to the cloud resources, create a `Cloud Credentials` for AWS on Rancher and name it as `Petclinic-AWS-Training-Account`.
+* To provide access of Rancher to the cloud resources, create a `Cloud Credentials` on `Cluster Management` segment for AWS on Rancher and name it as `Petclinic-AWS-Training-Account`. As region select `us-east-1`.
 
-* Create a `Node Template` on Rancher with following configuration for to be used while launching the EC2 instances and name it as `Petclinic-AWS-RancherOs-Template`.
+* Create a `Node Template` (Cluster Management --> RKE1 configuration) on Rancher with following configuration for to be used while launching the EC2 instances and name it as `Petclinic-AWS-RancherOs-Template`.
 
 ```yml
 Region            : us-east-1
@@ -3435,7 +3435,7 @@ git branch feature/msp-27
 git checkout feature/msp-27
 ```
 
-* Create a Kubernetes cluster using Rancher with RKE and new nodes in AWS  and name it as `petclinic-cluster-staging`.
+* Create a Kubernetes cluster using Rancher (Cluster Management --> Clusters) with RKE and new nodes in AWS  and name it as `petclinic-cluster-staging`.
 
 ```yml
 Cluster Type      : Amazon EC2
