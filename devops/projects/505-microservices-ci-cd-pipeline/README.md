@@ -4012,7 +4012,7 @@ git checkout feature/msp-29
   * Install the `Custom Resource Definition` resources separately
 
   ```bash
-  kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.crds.yaml
+  kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.crds.yaml
   ```
 
   * Install the cert-manager Helm chart
@@ -4021,7 +4021,7 @@ git checkout feature/msp-29
   helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --version v1.11.0
+  --version v1.12.0
   ```
 
   * Verify that the cert-manager is deployed correctly.
