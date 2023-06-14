@@ -3986,17 +3986,15 @@ git push origin main
 ## MSP 29 - Setting Domain Name and TLS for Production Pipeline with Route 53
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-* Create `feature/msp-29` branch from `main`.
-
-``` bash
-git checkout main
-git branch feature/msp-29
-git checkout feature/msp-29
-```
-
 * Create an `A` record of `petclinic.clarusway.us` in your hosted zone (in our case `clarusway.us`) using AWS Route 53 domain registrar and bind it to your `petclinic cluster`.
 
 * Configure TLS(SSL) certificate for `petclinic.clarusway.us` using `cert-manager` on petclinic K8s cluster with the following steps.
+
+- Switch user to jenkins for managing eks cluster. Execute following commands as `jenkins` user.
+
+```bash
+sudo su - jenkins
+```
 
 * Install the `cert-manager` on petclinic cluster. See [Cert-Manager info](https://cert-manager.io/docs/).
 
@@ -4039,7 +4037,7 @@ git checkout feature/msp-29
   kubectl get pods --namespace cert-manager -o wide
   ```
 
-* Create `ClusterIssuer` with name of `tls-cluster-issuer-prod.yml` for the production certificate through `Let's Encrypt ACME` (Automated Certificate Management Environment) with following content by importing YAML file on Ranhcer and save it under `k8s` folder. *Note that certificate will only be created after annotating and updating the `Ingress` resource.*
+* Create `ClusterIssuer` with name of `tls-cluster-issuer-prod.yml` for the production certificate through `Let's Encrypt ACME` (Automated Certificate Management Environment) with following content by importing YAML file on Ranhcer and save it under `/var/lib/jenkins` folder. *Note that certificate will only be created after annotating and updating the `Ingress` resource.*
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -4095,17 +4093,6 @@ spec:
 ```
 
 * Check and verify that the TLS(SSL) certificate created and successfully issued to `petclinic.clarusway.us` by checking URL of `https://petclinic.clarusway.us`
-
-* Commit the change, then push the tls script to the remote repo.
-
-``` bash
-git add .
-git commit -m 'added tls scripts for petclinic-production'
-git push --set-upstream origin feature/msp-29
-git checkout main
-git merge feature/msp-29
-git push origin main
-```
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 ## MSP 30 - Monitoring with Prometheus and Grafana
