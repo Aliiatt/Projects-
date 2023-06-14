@@ -3863,7 +3863,7 @@ kind: Service
 metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose-local-db.yml
-    kompose.version: 1.26.1 (a9d05d509)
+    kompose.version: 1.28.0 (c4137012e)
   labels:
     io.kompose.service: mysql-server
   name: mysql-server
