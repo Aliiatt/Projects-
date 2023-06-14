@@ -3426,9 +3426,9 @@ nano /home/ec2-user/.m2/settings.xml
 git add .
 git commit -m 'added Nexus server terraform files'
 git push --set-upstream origin feature/msp-26
-git checkout dev
+git checkout release
 git merge feature/msp-26
-git push origin dev
+git push origin release
 ```
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
